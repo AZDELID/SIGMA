@@ -42,6 +42,14 @@
   --color-brand-yellow-50: #fffde8;
   --color-brand-yellow-100: #fff9b8;
   --color-brand-yellow-200: #fff384;
+
+  /* Celeste del bisel del engranaje del logo — color de apoyo/branding,
+     distinto del azul marino (que es el color principal de texto/acentos). */
+  --color-brand-sky: #6cc9ee;
+  --color-brand-sky-dark: #0f7ba8; /* texto/ícono legible sobre blanco */
+  --color-brand-sky-50: #eefaff;
+  --color-brand-sky-100: #d6f2fd;
+  --color-brand-sky-200: #b0e6fa;
 }
 
 body {
@@ -50,13 +58,14 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Franja de marca: los 3 colores del logo en degradado, como firma visual
+/* Franja de marca: los 4 colores del logo en degradado, como firma visual
    discreta (borde superior del header, tarjetas destacadas). */
 .franja-marca {
   background: linear-gradient(
     90deg,
     var(--color-brand-red) 0%,
-    var(--color-brand-900) 50%,
+    var(--color-brand-900) 38%,
+    var(--color-brand-sky) 70%,
     var(--color-brand-yellow) 100%
   );
 }
@@ -83,6 +92,20 @@ body {
     outline: none;
     border-color: var(--color-brand-900);
     box-shadow: 0 0 0 3px var(--color-brand-200);
+  }
+
+  /* Botones y links también necesitan un foco visible para navegación por
+     teclado — antes solo los inputs lo tenían. Usa el celeste (distinto del
+     halo azul marino de los inputs) para diferenciar "clic" de "escribir". */
+  a:focus-visible,
+  button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-brand-sky-200);
+  }
+
+  ::selection {
+    background: var(--color-brand-sky-200);
+    color: var(--color-brand-900);
   }
 }
 

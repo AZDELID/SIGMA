@@ -83,6 +83,20 @@ export default async function AlumnoDetallePage({
 
   const qrDataUrl = await generarQrDataUrl(alumno.codigo);
 
+  let carreraNombre: string | null = null;
+  let areaNombre: string | null = null;
+  if (alumno.carrera_id) {
+    const { data: carrera } = await supabase
+      .from("carreras")
+      .select("nombre, areas!inner(nombre)")
+      .eq("id", alumno.carrera_id)
+      .maybeSingle<{ nombre: string; areas: { nombre: string } }>();
+    if (carrera) {
+      carreraNombre = carrera.nombre;
+      areaNombre = carrera.areas.nombre;
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -115,7 +129,17 @@ export default async function AlumnoDetallePage({
         </div>
       </div>
 
-      <section className="flex flex-col gap-4 rounded-lg border border-brand-200 bg-white p-4 sm:flex-row">
+      <section className="flex flex-col gap-4 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:flex-row">
+        {alumno.foto_url && (
+          <Image
+            src={alumno.foto_url}
+            alt={`Foto de ${alumno.nombres}`}
+            width={110}
+            height={110}
+            unoptimized
+            className="h-[110px] w-[110px] rounded-full border border-brand-200 bg-brand-50 object-cover"
+          />
+        )}
         <div className="grid flex-1 grid-cols-1 gap-3 text-sm sm:grid-cols-2 md:grid-cols-3">
           <div>
             <span className="block text-xs text-brand-600">DNI</span>
@@ -132,6 +156,21 @@ export default async function AlumnoDetallePage({
           <div>
             <span className="block text-xs text-brand-600">Teléfono del apoderado</span>
             {alumno.telefono_apoderado ?? "—"}
+          </div>
+          <div>
+            <span className="block text-xs text-brand-600">Turno</span>
+            {alumno.turno ?? "—"}
+          </div>
+          <div>
+            <span className="block text-xs text-brand-600">Postula a</span>
+            {carreraNombre ? (
+              <>
+                {carreraNombre}
+                <span className="ml-1 text-xs text-brand-600">({areaNombre})</span>
+              </>
+            ) : (
+              "—"
+            )}
           </div>
           <div className="sm:col-span-2 md:col-span-3">
             <span className="block text-xs text-brand-600">Dirección</span>
@@ -164,7 +203,7 @@ export default async function AlumnoDetallePage({
         {matriculas?.map((m) => (
           <div
             key={m.matricula_id}
-            className="overflow-hidden rounded-lg border border-brand-200 bg-white"
+            className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-brand-100 bg-brand-50 px-4 py-2">
               <p className="font-medium text-brand-900">{m.ciclo_nombre}</p>
@@ -208,7 +247,7 @@ export default async function AlumnoDetallePage({
           </div>
         ))}
         {matriculas?.length === 0 && (
-          <p className="rounded-lg border border-brand-200 bg-white px-4 py-6 text-center text-brand-400">
+          <p className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 px-4 py-6 text-center text-brand-400">
             Sin matrículas registradas.
           </p>
         )}
@@ -227,9 +266,9 @@ export default async function AlumnoDetallePage({
         <h2 className="text-sm font-semibold text-brand-900">
           Últimas asistencias
         </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
           <table className="w-full text-sm">
-            <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+            <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
                 <th className="px-4 py-2">Fecha y hora</th>
                 <th className="px-4 py-2">Tipo</th>
@@ -238,7 +277,7 @@ export default async function AlumnoDetallePage({
             </thead>
             <tbody className="divide-y divide-brand-100">
               {asistencias?.map((a) => (
-                <tr key={a.id}>
+                <tr key={a.id} className="transition-colors hover:bg-brand-50">
                   <td className="px-4 py-2 text-brand-600">
                     {new Date(a.marcado_en).toLocaleString("es-PE", {
                       timeZone: "America/Lima",
@@ -270,9 +309,9 @@ export default async function AlumnoDetallePage({
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-brand-900">Notas</h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
           <table className="w-full text-sm">
-            <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+            <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
                 <th className="px-4 py-2">Simulacro</th>
                 <th className="px-4 py-2">Materia</th>
@@ -282,7 +321,7 @@ export default async function AlumnoDetallePage({
             </thead>
             <tbody className="divide-y divide-brand-100">
               {resultados?.map((r) => (
-                <tr key={r.resultado_id}>
+                <tr key={r.resultado_id} className="transition-colors hover:bg-brand-50">
                   <td className="px-4 py-2 text-brand-900">
                     {r.simulacro_nombre}
                     <span className="ml-2 text-xs text-brand-600">

@@ -8,6 +8,8 @@ export type Ciclo = {
   created_at: string;
 };
 
+export type Turno = "Mañana" | "Tarde" | "Noche";
+
 export type Alumno = {
   id: string;
   codigo: string;
@@ -17,9 +19,25 @@ export type Alumno = {
   fecha_nacimiento: string | null;
   telefono: string | null;
   telefono_apoderado: string | null;
+  tiene_whatsapp: boolean;
   direccion: string | null;
+  turno: Turno | null;
+  carrera_id: string | null;
+  foto_url: string | null;
   activo: boolean;
   created_at: string;
+};
+
+export type Area = {
+  id: string;
+  nombre: string;
+  orden: number;
+};
+
+export type Carrera = {
+  id: string;
+  nombre: string;
+  area_id: string;
 };
 
 export type Matricula = {

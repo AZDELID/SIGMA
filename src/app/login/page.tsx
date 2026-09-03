@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-brand-50 px-4">
-      <div className="w-full max-w-sm overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm">
+      <div className="w-full max-w-sm overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 shadow-sm">
         <div className="franja-marca h-1.5" />
         <div className="p-8">
           <div className="mb-4 flex justify-center">
@@ -66,7 +66,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={pending}
-              className="w-full rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white hover:bg-brand-800 disabled:opacity-50"
+              className="w-full rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
             >
               {pending ? "Ingresando..." : "Ingresar"}
             </button>

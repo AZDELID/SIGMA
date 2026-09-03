@@ -164,7 +164,7 @@ export default async function InicioPage({
           <Link
             key={t.label}
             href={t.href}
-            className="rounded-lg border border-brand-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+            className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
           >
             <p className="text-xs text-brand-600">{t.label}</p>
             <p className="mt-1 text-2xl font-semibold text-brand-900">
@@ -202,7 +202,7 @@ export default async function InicioPage({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-brand-200 bg-white p-4">
+          <div className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
             <p className="text-xs text-brand-600">Asistieron el {fechaConsulta}</p>
             <p className="mt-1 text-2xl font-semibold text-green-700">
               {asistieronEseDia.length}
@@ -211,7 +211,7 @@ export default async function InicioPage({
               </span>
             </p>
           </div>
-          <div className="rounded-lg border border-brand-200 bg-white p-4">
+          <div className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
             <p className="text-xs text-brand-600">Faltaron el {fechaConsulta}</p>
             <p className="mt-1 text-2xl font-semibold text-brand-red-dark">
               {faltaronEseDia.length}
@@ -223,7 +223,7 @@ export default async function InicioPage({
         </div>
 
         {faltaronEseDia.length > 0 && (
-          <details className="rounded-lg border border-brand-200 bg-white">
+          <details className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
             <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-900">
               Ver quiénes faltaron ({faltaronEseDia.length})
             </summary>
@@ -250,7 +250,7 @@ export default async function InicioPage({
             {ciclosActivos.map((c) => (
               <div
                 key={c.id}
-                className="rounded-lg border border-brand-200 bg-white p-4"
+                className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4"
               >
                 <p className="font-medium text-brand-900">{c.nombre}</p>
                 <p className="text-xs text-brand-600">
@@ -278,11 +278,11 @@ export default async function InicioPage({
           <h2 className="text-sm font-semibold text-brand-900">
             Alumnos con mayor deuda
           </h2>
-          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
             <table className="w-full text-sm">
               <tbody className="divide-y divide-brand-100">
                 {topDeudores.map((m) => (
-                  <tr key={m.matricula_id}>
+                  <tr key={m.matricula_id} className="transition-colors hover:bg-brand-50">
                     <td className="px-4 py-2">
                       <p className="font-medium text-brand-900">
                         {m.alumno_apellidos}, {m.alumno_nombres}
@@ -318,11 +318,11 @@ export default async function InicioPage({
           <h2 className="text-sm font-semibold text-brand-900">
             Últimos pagos
           </h2>
-          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
             <table className="w-full text-sm">
               <tbody className="divide-y divide-brand-100">
                 {ultimosPagos?.map((p) => (
-                  <tr key={p.id}>
+                  <tr key={p.id} className="transition-colors hover:bg-brand-50">
                     <td className="px-4 py-2">
                       <p className="font-medium text-brand-900">
                         {p.matriculas.alumnos.apellidos},{" "}
@@ -354,9 +354,9 @@ export default async function InicioPage({
         <h2 className="text-sm font-semibold text-brand-900">
           Últimas matrículas
         </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
           <table className="w-full text-sm">
-            <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+            <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
                 <th className="px-4 py-2">Fecha</th>
                 <th className="px-4 py-2">Alumno</th>
@@ -366,7 +366,7 @@ export default async function InicioPage({
             </thead>
             <tbody className="divide-y divide-brand-100">
               {ultimasMatriculas.map((m) => (
-                <tr key={m.matricula_id}>
+                <tr key={m.matricula_id} className="transition-colors hover:bg-brand-50">
                   <td className="px-4 py-2 text-brand-600">
                     {m.fecha_matricula}
                   </td>

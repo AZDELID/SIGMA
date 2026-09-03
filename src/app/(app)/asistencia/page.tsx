@@ -88,11 +88,11 @@ export default async function AsistenciaPage({
         </form>
 
         {query && (
-          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
             <table className="w-full text-sm">
               <tbody className="divide-y divide-brand-100">
                 {alumnosEncontrados?.map((alumno) => (
-                  <tr key={alumno.id}>
+                  <tr key={alumno.id} className="transition-colors hover:bg-brand-50">
                     <td className="px-4 py-2 font-mono text-xs text-brand-600">
                       {alumno.codigo}
                     </td>
@@ -104,6 +104,7 @@ export default async function AsistenciaPage({
                         alumnoId={alumno.id}
                         nombreCompleto={`${alumno.nombres} ${alumno.apellidos}`}
                         telefonoApoderado={alumno.telefono_apoderado}
+                        tieneWhatsapp={alumno.tiene_whatsapp}
                         tipo={tipo}
                       />
                     </td>
@@ -126,9 +127,9 @@ export default async function AsistenciaPage({
         <h2 className="text-sm font-semibold text-brand-900">
           Asistencias de hoy ({asistenciasHoy?.length ?? 0})
         </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
           <table className="w-full text-sm">
-            <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+            <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
                 <th className="px-4 py-2">Hora</th>
                 <th className="px-4 py-2">Alumno</th>
@@ -139,7 +140,7 @@ export default async function AsistenciaPage({
             </thead>
             <tbody className="divide-y divide-brand-100">
               {asistenciasHoy?.map((a) => (
-                <tr key={a.id}>
+                <tr key={a.id} className="transition-colors hover:bg-brand-50">
                   <td className="px-4 py-2 text-brand-600">
                     {new Date(a.marcado_en).toLocaleTimeString("es-PE", {
                       timeZone: "America/Lima",

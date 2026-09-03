@@ -17,6 +17,7 @@ export type MarcarPorCodigoState = {
     alumno: string;
     tipo: TipoAsistencia;
     telefonoApoderado: string | null;
+    tieneWhatsapp: boolean;
     yaEstabaMarcado: boolean;
   };
 };
@@ -80,6 +81,7 @@ export async function marcarPorCodigo(
       alumno: `${alumno.nombres} ${alumno.apellidos}`,
       tipo,
       telefonoApoderado: alumno.telefono_apoderado,
+      tieneWhatsapp: alumno.tiene_whatsapp,
       yaEstabaMarcado,
     },
   };

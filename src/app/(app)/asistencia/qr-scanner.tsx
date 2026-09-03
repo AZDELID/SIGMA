@@ -72,7 +72,7 @@ export function QrScanner({
   }, [onDetected]);
 
   return (
-    <div className="space-y-2 rounded-lg border border-brand-200 bg-white p-4">
+    <div className="space-y-2 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
       {error ? (
         <p className="rounded-md bg-brand-red-50 px-3 py-2 text-sm text-brand-red-dark">
           {error}

@@ -33,7 +33,7 @@ export function CodigoForm({ tipo }: { tipo: TipoAsistencia }) {
   }
 
   return (
-    <div className="rounded-lg border border-brand-200 bg-white p-4">
+    <div className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
       <form action={formAction} className="flex gap-2">
         <input type="hidden" name="tipo" value={tipo} />
         <input
@@ -46,7 +46,7 @@ export function CodigoForm({ tipo }: { tipo: TipoAsistencia }) {
         />
         <button
           type="submit"
-          className="rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white hover:bg-brand-800"
+          className="rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98]"
         >
           Marcar
         </button>
@@ -86,7 +86,7 @@ export function CodigoForm({ tipo }: { tipo: TipoAsistencia }) {
               ? `${state.ok.alumno} — ya tenía "${ETIQUETA[state.ok.tipo]}" registrada hoy, se registró otra.`
               : `${ETIQUETA[state.ok.tipo]} registrada: ${state.ok.alumno}.`}
           </span>
-          {state.ok.telefonoApoderado && (
+          {state.ok.telefonoApoderado && state.ok.tieneWhatsapp && (
             <a
               href={construirLinkAsistenciaWhatsapp(
                 state.ok.telefonoApoderado,

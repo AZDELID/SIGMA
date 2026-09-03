@@ -34,16 +34,16 @@ export default async function SimulacrosPage() {
           </Link>
           <Link
             href="/simulacros/nuevo"
-            className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white hover:bg-brand-800"
+            className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98]"
           >
             + Nuevo simulacro
           </Link>
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
         <table className="w-full text-sm">
-          <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+          <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
             <tr>
               <th className="px-4 py-2">Nombre</th>
               <th className="px-4 py-2">Fecha</th>
@@ -53,7 +53,7 @@ export default async function SimulacrosPage() {
           </thead>
           <tbody className="divide-y divide-brand-100">
             {simulacros?.map((s) => (
-              <tr key={s.id}>
+              <tr key={s.id} className="transition-colors hover:bg-brand-50">
                 <td className="px-4 py-2 font-medium text-brand-900">{s.nombre}</td>
                 <td className="px-4 py-2 text-brand-600">{s.fecha}</td>
                 <td className="px-4 py-2 text-brand-600">{s.ciclos.nombre}</td>

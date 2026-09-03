@@ -58,7 +58,7 @@ export function MatriculaForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white hover:bg-brand-800 disabled:opacity-50"
+        className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
       >
         {pending ? "Guardando..." : "Agregar matrícula"}
       </button>

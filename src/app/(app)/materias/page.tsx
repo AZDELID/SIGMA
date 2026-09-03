@@ -21,11 +21,11 @@ export default async function MateriasPage() {
 
       <MateriaForm />
 
-      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
         <table className="w-full text-sm">
           <tbody className="divide-y divide-brand-100">
             {materias?.map((m) => (
-              <tr key={m.id}>
+              <tr key={m.id} className="transition-colors hover:bg-brand-50">
                 <td className="px-4 py-2 font-medium text-brand-900">{m.nombre}</td>
               </tr>
             ))}

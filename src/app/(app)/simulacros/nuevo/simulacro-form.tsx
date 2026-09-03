@@ -46,7 +46,7 @@ export function SimulacroForm({
 
   return (
     <form action={handleSubmit} className="space-y-4">
-      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white p-4 sm:grid-cols-3">
+      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:grid-cols-3">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Datos del simulacro
         </legend>
@@ -91,7 +91,7 @@ export function SimulacroForm({
         </div>
       </fieldset>
 
-      <fieldset className="rounded-lg border border-brand-200 bg-white p-4">
+      <fieldset className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Materias evaluadas
         </legend>
@@ -131,7 +131,7 @@ export function SimulacroForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white hover:bg-brand-800 disabled:opacity-50"
+        className="rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
       >
         {pending ? "Creando..." : "Crear simulacro"}
       </button>

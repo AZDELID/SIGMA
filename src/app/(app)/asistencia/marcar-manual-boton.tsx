@@ -10,11 +10,13 @@ export function MarcarManualBoton({
   alumnoId,
   nombreCompleto,
   telefonoApoderado,
+  tieneWhatsapp,
   tipo,
 }: {
   alumnoId: string;
   nombreCompleto: string;
   telefonoApoderado: string | null;
+  tieneWhatsapp: boolean;
   tipo: TipoAsistencia;
 }) {
   const [pending, startTransition] = useTransition();
@@ -26,7 +28,7 @@ export function MarcarManualBoton({
         <span className="text-xs text-green-700">
           {ETIQUETA[tipo]} registrada
         </span>
-        {telefonoApoderado && (
+        {telefonoApoderado && tieneWhatsapp && (
           <a
             href={construirLinkAsistenciaWhatsapp(
               telefonoApoderado,
@@ -54,7 +56,7 @@ export function MarcarManualBoton({
           setMarcado(true);
         });
       }}
-      className="rounded-md bg-brand-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-800 disabled:opacity-50"
+      className="rounded-md bg-brand-900 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
     >
       {pending ? "Marcando..." : `Marcar ${ETIQUETA[tipo].toLowerCase()}`}
     </button>

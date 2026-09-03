@@ -25,7 +25,7 @@ export function PuntajesForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <details className="rounded-lg border border-brand-200 bg-white">
+    <details className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
       <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-900">
         {materiaNombre}{" "}
         <span className="font-normal text-brand-600">
@@ -63,7 +63,7 @@ export function PuntajesForm({
           <button
             type="submit"
             disabled={pending}
-            className="rounded-md bg-brand-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-800 disabled:opacity-50"
+            className="rounded-md bg-brand-900 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
           >
             {pending ? "Guardando..." : "Guardar puntajes"}
           </button>

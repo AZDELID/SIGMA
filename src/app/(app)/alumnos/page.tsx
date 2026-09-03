@@ -40,7 +40,7 @@ export default async function AlumnosPage({
         </div>
         <Link
           href="/alumnos/nuevo"
-          className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white hover:bg-brand-800"
+          className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98]"
         >
           + Matricular alumno
         </Link>
@@ -66,9 +66,9 @@ export default async function AlumnosPage({
         </label>
       </form>
 
-      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white">
+      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
         <table className="w-full text-sm">
-          <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+          <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
             <tr>
               <th className="px-4 py-2">Código</th>
               <th className="px-4 py-2">Nombre</th>
@@ -79,7 +79,7 @@ export default async function AlumnosPage({
           </thead>
           <tbody className="divide-y divide-brand-100">
             {alumnos?.map((alumno) => (
-              <tr key={alumno.id}>
+              <tr key={alumno.id} className="transition-colors hover:bg-brand-50">
                 <td className="px-4 py-2 font-mono text-xs text-brand-600">
                   {alumno.codigo}
                 </td>

@@ -91,9 +91,9 @@ export default async function SimulacroDetallePage({
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-brand-900">Resumen de notas</h2>
-        <div className="overflow-x-auto rounded-lg border border-brand-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
           <table className="w-full text-sm">
-            <thead className="bg-brand-50 text-left text-xs font-medium uppercase text-brand-600">
+            <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
                 <th className="px-4 py-2">Alumno</th>
                 {simulacroMaterias?.map((sm) => (
@@ -106,7 +106,7 @@ export default async function SimulacroDetallePage({
             </thead>
             <tbody className="divide-y divide-brand-100">
               {alumnos.map((a) => (
-                <tr key={a.id}>
+                <tr key={a.id} className="transition-colors hover:bg-brand-50">
                   <td className="px-4 py-2 font-medium text-brand-900">
                     {a.apellidos}, {a.nombres}
                   </td>
