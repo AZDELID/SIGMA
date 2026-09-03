@@ -3,6 +3,7 @@
 import { useMemo, useState, useActionState } from "react";
 import { actualizarAlumno, type EditarAlumnoState } from "../../actions";
 import { FotoCaptura } from "../../foto-captura";
+import { claseCampo, MensajeCampo } from "../../campo-error";
 import type { Alumno, Area, Carrera } from "@/lib/types/database";
 
 const initialState: EditarAlumnoState = { error: null };
@@ -44,9 +45,10 @@ export function EditarAlumnoForm({
           <input
             name="nombres"
             required
-            defaultValue={alumno.nombres}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.nombres ?? alumno.nombres}
+            className={claseCampo("nombres", state.campo)}
           />
+          <MensajeCampo campo="nombres" campoConError={state.campo} mensaje={state.error} />
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -55,9 +57,10 @@ export function EditarAlumnoForm({
           <input
             name="apellidos"
             required
-            defaultValue={alumno.apellidos}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.apellidos ?? alumno.apellidos}
+            className={claseCampo("apellidos", state.campo)}
           />
+          <MensajeCampo campo="apellidos" campoConError={state.campo} mensaje={state.error} />
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -70,9 +73,10 @@ export function EditarAlumnoForm({
             title="8 dígitos"
             inputMode="numeric"
             maxLength={8}
-            defaultValue={alumno.dni}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.dni ?? alumno.dni}
+            className={claseCampo("dni", state.campo)}
           />
+          <MensajeCampo campo="dni" campoConError={state.campo} mensaje={state.error} />
           <p className="mt-1 text-xs text-brand-yellow-dark">
             Si lo cambias, el código del alumno (código {alumno.codigo}) se
             regenera y el carnet/QR ya impreso deja de coincidir.
@@ -86,8 +90,13 @@ export function EditarAlumnoForm({
             name="fecha_nacimiento"
             type="date"
             max={new Date().toISOString().slice(0, 10)}
-            defaultValue={alumno.fecha_nacimiento ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.fecha_nacimiento ?? alumno.fecha_nacimiento ?? ""}
+            className={claseCampo("fecha_nacimiento", state.campo)}
+          />
+          <MensajeCampo
+            campo="fecha_nacimiento"
+            campoConError={state.campo}
+            mensaje={state.error}
           />
         </div>
         <div>
@@ -100,9 +109,10 @@ export function EditarAlumnoForm({
             title="9 dígitos"
             inputMode="numeric"
             maxLength={9}
-            defaultValue={alumno.telefono ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.telefono ?? alumno.telefono ?? ""}
+            className={claseCampo("telefono", state.campo)}
           />
+          <MensajeCampo campo="telefono" campoConError={state.campo} mensaje={state.error} />
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -114,14 +124,19 @@ export function EditarAlumnoForm({
             title="9 dígitos"
             inputMode="numeric"
             maxLength={9}
-            defaultValue={alumno.telefono_apoderado ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.telefono_apoderado ?? alumno.telefono_apoderado ?? ""}
+            className={claseCampo("telefono_apoderado", state.campo)}
+          />
+          <MensajeCampo
+            campo="telefono_apoderado"
+            campoConError={state.campo}
+            mensaje={state.error}
           />
           <label className="mt-1.5 flex items-center gap-1.5 text-xs text-brand-700">
             <input
               type="checkbox"
               name="tiene_whatsapp"
-              defaultChecked={alumno.tiene_whatsapp}
+              defaultChecked={state.valores?.tiene_whatsapp ?? alumno.tiene_whatsapp}
             />
             Tiene WhatsApp
           </label>
@@ -132,7 +147,7 @@ export function EditarAlumnoForm({
           </label>
           <input
             name="direccion"
-            defaultValue={alumno.direccion ?? ""}
+            defaultValue={state.valores?.direccion ?? alumno.direccion ?? ""}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
@@ -152,8 +167,8 @@ export function EditarAlumnoForm({
           <select
             name="turno"
             required
-            defaultValue={alumno.turno ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            defaultValue={state.valores?.turno ?? alumno.turno ?? ""}
+            className={claseCampo("turno", state.campo)}
           >
             <option value="" disabled>
               Selecciona
@@ -162,6 +177,7 @@ export function EditarAlumnoForm({
             <option value="Tarde">Tarde</option>
             <option value="Noche">Noche</option>
           </select>
+          <MensajeCampo campo="turno" campoConError={state.campo} mensaje={state.error} />
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -194,7 +210,7 @@ export function EditarAlumnoForm({
             value={carreraId}
             onChange={(e) => setCarreraId(e.target.value)}
             disabled={!areaId}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black disabled:bg-brand-50"
+            className={`${claseCampo("carrera_id", state.campo)} disabled:bg-brand-50`}
           >
             <option value="">
               {areaId ? "Selecciona una carrera" : "Elige un área primero"}
@@ -205,10 +221,13 @@ export function EditarAlumnoForm({
               </option>
             ))}
           </select>
+          <MensajeCampo campo="carrera_id" campoConError={state.campo} mensaje={state.error} />
         </div>
       </fieldset>
 
-      {state.error && <p className="text-sm text-brand-red-dark">{state.error}</p>}
+      {state.error && !state.campo && (
+        <p className="text-sm text-brand-red-dark">{state.error}</p>
+      )}
 
       <button
         type="submit"

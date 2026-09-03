@@ -81,7 +81,7 @@ export default async function SimulacroDetallePage({
         <Link href="/simulacros" className="text-sm text-brand-600 hover:text-brand-900">
           ← Notas
         </Link>
-        <h1 className="mt-1 text-lg font-semibold text-brand-900">
+        <h1 className="mt-1 text-xl font-bold text-brand-900">
           {simulacro.nombre}
         </h1>
         <p className="text-sm text-brand-600">

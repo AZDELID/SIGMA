@@ -21,7 +21,12 @@ export function PuntajesForm({
   alumnos: Alumno[];
   puntajesActuales: Record<string, number>;
 }) {
-  const action = guardarPuntajes.bind(null, simulacroId, simulacroMateriaId);
+  const action = guardarPuntajes.bind(
+    null,
+    simulacroId,
+    simulacroMateriaId,
+    puntajeMaximo
+  );
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
@@ -46,6 +51,7 @@ export function PuntajesForm({
                 type="number"
                 name={`puntaje_${a.id}`}
                 min="0"
+                max={puntajeMaximo}
                 step="0.01"
                 defaultValue={puntajesActuales[a.id] ?? ""}
                 placeholder="—"

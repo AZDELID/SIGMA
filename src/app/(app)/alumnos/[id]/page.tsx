@@ -104,7 +104,7 @@ export default async function AlumnoDetallePage({
           ← Alumnos
         </Link>
         <div className="mt-1 flex flex-wrap items-center gap-3">
-          <h1 className="text-lg font-semibold text-brand-900">
+          <h1 className="text-xl font-bold text-brand-900">
             {alumno.apellidos}, {alumno.nombres}
           </h1>
           <span className="font-mono text-xs text-brand-600">{alumno.codigo}</span>

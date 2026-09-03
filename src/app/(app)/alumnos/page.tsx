@@ -33,7 +33,7 @@ export default async function AlumnosPage({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-brand-900">Alumnos</h1>
+          <h1 className="text-xl font-bold text-brand-900">Alumnos</h1>
           <p className="text-sm text-brand-600">
             {alumnos?.length ?? 0} resultado(s)
           </p>

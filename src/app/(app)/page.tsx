@@ -7,6 +7,18 @@ import {
   inicioDiaLimaDeFecha,
   inicioMesLima,
 } from "@/lib/utils/fecha";
+import { IconoPersona, IconoReloj, IconoMoneda, IconoAlerta } from "./iconos-dashboard";
+
+const ACENTO = {
+  navy: { borde: "border-l-brand-900", fondo: "bg-brand-900/10", texto: "text-brand-900" },
+  sky: { borde: "border-l-brand-sky", fondo: "bg-brand-sky/15", texto: "text-brand-sky-dark" },
+  verde: { borde: "border-l-green-600", fondo: "bg-green-100", texto: "text-green-700" },
+  amarillo: {
+    borde: "border-l-brand-yellow",
+    fondo: "bg-brand-yellow-100",
+    texto: "text-brand-yellow-dark",
+  },
+} as const;
 
 type PagoReciente = {
   id: string;
@@ -123,34 +135,54 @@ export default async function InicioPage({
   }
 
   const tarjetas = [
-    { label: "Alumnos activos", valor: alumnosActivos ?? 0, href: "/alumnos" },
-    { label: "Asistencias hoy", valor: asistenciasHoy ?? 0, href: "/asistencia" },
+    {
+      label: "Alumnos activos",
+      valor: alumnosActivos ?? 0,
+      href: "/alumnos",
+      icono: IconoPersona,
+      acento: ACENTO.navy,
+    },
+    {
+      label: "Asistencias hoy",
+      valor: asistenciasHoy ?? 0,
+      href: "/asistencia",
+      icono: IconoReloj,
+      acento: ACENTO.sky,
+    },
     {
       label: "Cobrado hoy",
       valor: `S/ ${cobradoHoy.toFixed(2)}`,
       href: "/pagos",
+      icono: IconoMoneda,
+      acento: ACENTO.verde,
     },
     {
       label: "Cobrado este mes",
       valor: `S/ ${cobradoMes.toFixed(2)}`,
       href: "/pagos",
+      icono: IconoMoneda,
+      acento: ACENTO.verde,
     },
     {
       label: "Alumnos con saldo pendiente",
       valor: conSaldo.length,
       href: "/pagos",
+      icono: IconoAlerta,
+      acento: ACENTO.amarillo,
     },
     {
       label: "Deuda total pendiente",
       valor: `S/ ${deudaTotal.toFixed(2)}`,
       href: "/pagos",
+      icono: IconoAlerta,
+      acento: ACENTO.amarillo,
     },
   ];
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Inicio</h1>
+        <h1 className="text-xl font-bold text-brand-900">Inicio</h1>
         <p className="text-sm text-brand-600">
           Resumen del día — {new Date().toLocaleDateString("es-PE", {
             timeZone: "America/Lima",
@@ -164,12 +196,19 @@ export default async function InicioPage({
           <Link
             key={t.label}
             href={t.href}
-            className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+            className={`flex items-start gap-3 rounded-lg border border-l-4 border-brand-200 bg-white p-4 shadow-sm shadow-brand-900/5 transition-all hover:-translate-y-0.5 hover:shadow-md ${t.acento.borde}`}
           >
-            <p className="text-xs text-brand-600">{t.label}</p>
-            <p className="mt-1 text-2xl font-semibold text-brand-900">
-              {t.valor}
-            </p>
+            <span
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${t.acento.fondo}`}
+            >
+              <t.icono className={`h-[18px] w-[18px] ${t.acento.texto}`} />
+            </span>
+            <span className="min-w-0">
+              <p className="text-xs text-brand-600">{t.label}</p>
+              <p className="font-display mt-0.5 text-2xl font-bold text-brand-900">
+                {t.valor}
+              </p>
+            </span>
           </Link>
         ))}
       </div>

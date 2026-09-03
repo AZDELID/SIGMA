@@ -114,6 +114,7 @@ export function SimulacroForm({
                 <input
                   type="number"
                   min="1"
+                  max="20"
                   step="0.01"
                   disabled={!seleccion[m.id]?.incluida}
                   value={seleccion[m.id]?.puntajeMaximo ?? "20"}

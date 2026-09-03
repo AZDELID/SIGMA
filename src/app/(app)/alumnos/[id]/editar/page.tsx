@@ -30,7 +30,7 @@ export default async function EditarAlumnoPage({
         >
           ← Volver a la ficha
         </Link>
-        <h1 className="mt-1 text-lg font-semibold text-brand-900">
+        <h1 className="mt-1 text-xl font-bold text-brand-900">
           Editar alumno
         </h1>
       </div>

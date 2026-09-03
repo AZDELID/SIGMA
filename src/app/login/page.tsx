@@ -10,8 +10,8 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initialState);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand-50 px-4">
-      <div className="w-full max-w-sm overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 shadow-sm">
+    <div className="marca-fondo flex min-h-screen items-center justify-center bg-brand-50 px-4">
+      <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-lg border border-brand-200 bg-white shadow-md shadow-brand-900/10">
         <div className="franja-marca h-1.5" />
         <div className="p-8">
           <div className="mb-4 flex justify-center">

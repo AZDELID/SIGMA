@@ -56,7 +56,7 @@ export default async function AsistenciaPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Asistencia</h1>
+        <h1 className="text-xl font-bold text-brand-900">Asistencia</h1>
         <p className="text-sm text-brand-600">
           Elige qué vas a registrar, luego escanea el carnet o búscalo manualmente.
         </p>

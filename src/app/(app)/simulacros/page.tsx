@@ -20,7 +20,7 @@ export default async function SimulacrosPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-brand-900">Notas</h1>
+          <h1 className="text-xl font-bold text-brand-900">Notas</h1>
           <p className="text-sm text-brand-600">
             Simulacros y resultados por alumno.
           </p>
