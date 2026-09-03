@@ -18,7 +18,7 @@ export function MatriculaForm({
 
   if (ciclosDisponibles.length === 0) {
     return (
-      <p className="text-sm text-blue-600">
+      <p className="text-sm text-brand-600">
         Ya está matriculado en todos los ciclos activos.
       </p>
     );
@@ -27,13 +27,13 @@ export function MatriculaForm({
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-3">
       <div>
-        <label className="mb-1 block text-xs font-medium text-blue-600">
+        <label className="mb-1 block text-xs font-medium text-brand-600">
           Ciclo
         </label>
         <select
           name="ciclo_id"
           required
-          className="rounded-md border border-blue-300 bg-white px-3 py-2 text-sm text-black"
+          className="rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
         >
           {ciclosDisponibles.map((c) => (
             <option key={c.id} value={c.id}>
@@ -43,7 +43,7 @@ export function MatriculaForm({
         </select>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-blue-600">
+        <label className="mb-1 block text-xs font-medium text-brand-600">
           Monto pactado (S/)
         </label>
         <input
@@ -52,18 +52,18 @@ export function MatriculaForm({
           min="0"
           step="0.01"
           required
-          className="w-32 rounded-md border border-blue-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-32 rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
         />
       </div>
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-blue-900 px-3 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50"
+        className="rounded-md bg-brand-900 px-3 py-2 text-sm font-medium text-white hover:bg-brand-800 disabled:opacity-50"
       >
         {pending ? "Guardando..." : "Agregar matrícula"}
       </button>
       {state.error && (
-        <p className="w-full text-sm text-red-600">{state.error}</p>
+        <p className="w-full text-sm text-brand-red-dark">{state.error}</p>
       )}
     </form>
   );

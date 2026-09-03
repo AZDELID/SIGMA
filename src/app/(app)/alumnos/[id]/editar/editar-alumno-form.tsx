@@ -1,25 +1,17 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
-import { crearAlumno, type AlumnoFormState } from "../actions";
-import type { Ciclo } from "@/lib/types/database";
+import { useActionState } from "react";
+import { actualizarAlumno, type EditarAlumnoState } from "../../actions";
+import type { Alumno } from "@/lib/types/database";
 
-const initialState: AlumnoFormState = { error: null };
+const initialState: EditarAlumnoState = { error: null };
 
-export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
-  const [state, formAction, pending] = useActionState(
-    crearAlumno,
-    initialState
-  );
-  const [cicloId, setCicloId] = useState("");
-
-  const cicloSeleccionado = useMemo(
-    () => ciclos.find((c) => c.id === cicloId),
-    [ciclos, cicloId]
-  );
+export function EditarAlumnoForm({ alumno }: { alumno: Alumno }) {
+  const action = actualizarAlumno.bind(null, alumno.id);
+  const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-4">
       <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white p-4 sm:grid-cols-2">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Datos del alumno
@@ -31,6 +23,7 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
           <input
             name="nombres"
             required
+            defaultValue={alumno.nombres}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
@@ -41,12 +34,13 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
           <input
             name="apellidos"
             required
+            defaultValue={alumno.apellidos}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-brand-600">
-            DNI * (8 dígitos — es la base del código del alumno)
+            DNI * (8 dígitos)
           </label>
           <input
             name="dni"
@@ -55,8 +49,13 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
             title="8 dígitos"
             inputMode="numeric"
             maxLength={8}
+            defaultValue={alumno.dni}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
+          <p className="mt-1 text-xs text-brand-yellow-dark">
+            Si lo cambias, el código del alumno (código {alumno.codigo}) se
+            regenera y el carnet/QR ya impreso deja de coincidir.
+          </p>
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -65,6 +64,7 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
           <input
             name="fecha_nacimiento"
             type="date"
+            defaultValue={alumno.fecha_nacimiento ?? ""}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
@@ -74,6 +74,7 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
           </label>
           <input
             name="telefono"
+            defaultValue={alumno.telefono ?? ""}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
@@ -83,6 +84,7 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
           </label>
           <input
             name="telefono_apoderado"
+            defaultValue={alumno.telefono_apoderado ?? ""}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
@@ -92,57 +94,7 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
           </label>
           <input
             name="direccion"
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
-          />
-        </div>
-      </fieldset>
-
-      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white p-4 sm:grid-cols-3">
-        <legend className="px-1 text-sm font-medium text-brand-700">
-          Matrícula
-        </legend>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-brand-600">
-            Ciclo *
-          </label>
-          <select
-            name="ciclo_id"
-            required
-            value={cicloId}
-            onChange={(e) => setCicloId(e.target.value)}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
-          >
-            <option value="">Selecciona un ciclo</option>
-            {ciclos.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-brand-600">
-            Monto pactado (S/) *
-          </label>
-          <input
-            name="monto_pactado"
-            type="number"
-            min="0"
-            step="0.01"
-            required
-            defaultValue={cicloSeleccionado?.monto_default ?? ""}
-            key={cicloSeleccionado?.id ?? "sin-ciclo"}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-brand-600">
-            Fecha de matrícula
-          </label>
-          <input
-            name="fecha_matricula"
-            type="date"
-            defaultValue={new Date().toISOString().slice(0, 10)}
+            defaultValue={alumno.direccion ?? ""}
             className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
           />
         </div>
@@ -155,7 +107,7 @@ export function AlumnoForm({ ciclos }: { ciclos: Ciclo[] }) {
         disabled={pending}
         className="rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white hover:bg-brand-800 disabled:opacity-50"
       >
-        {pending ? "Guardando..." : "Matricular alumno"}
+        {pending ? "Guardando..." : "Guardar cambios"}
       </button>
     </form>
   );

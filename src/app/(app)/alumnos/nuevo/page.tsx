@@ -17,11 +17,11 @@ export default async function NuevoAlumnoPage() {
       <div>
         <Link
           href="/alumnos"
-          className="text-sm text-blue-600 hover:text-blue-900"
+          className="text-sm text-brand-600 hover:text-brand-900"
         >
           ← Alumnos
         </Link>
-        <h1 className="mt-1 text-lg font-semibold text-blue-900">
+        <h1 className="mt-1 text-lg font-semibold text-brand-900">
           Nueva matrícula
         </h1>
       </div>
@@ -29,7 +29,7 @@ export default async function NuevoAlumnoPage() {
       {ciclos && ciclos.length > 0 ? (
         <AlumnoForm ciclos={ciclos} />
       ) : (
-        <p className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
+        <p className="rounded-lg border border-brand-yellow-200 bg-brand-yellow-50 p-4 text-sm text-brand-yellow-dark">
           No hay ciclos activos. Crea un ciclo antes de matricular alumnos en{" "}
           <Link href="/ciclos" className="underline">
             Ciclos
