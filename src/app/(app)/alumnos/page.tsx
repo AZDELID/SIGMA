@@ -33,7 +33,11 @@ export default async function AlumnosPage({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
+<<<<<<< HEAD
           <h1 className="text-lg font-semibold text-brand-ink">Alumnos</h1>
+=======
+          <h1 className="text-xl font-bold text-brand-900">Alumnos</h1>
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
           <p className="text-sm text-brand-600">
             {alumnos?.length ?? 0} resultado(s)
           </p>

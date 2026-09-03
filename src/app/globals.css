@@ -73,6 +73,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-sora);
 
   --color-brand-50: var(--brand-50);
   --color-brand-100: var(--brand-100);
@@ -250,6 +251,44 @@ body {
     background: var(--color-brand-sky-200);
     color: var(--color-brand-900);
   }
+
+  /* Títulos con la tipografía geométrica, no la de cuerpo de texto —
+     es lo que más rápido le da carácter propio a toda la app. */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Textura de fondo sutil con el motivo del engranaje del logo — un guiño
+   a la marca sin repetir el logo literal ni distraer del contenido. */
+.marca-fondo {
+  position: relative;
+  overflow: hidden;
+}
+.marca-fondo::before,
+.marca-fondo::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  border: 22px dashed var(--color-brand-900);
+  opacity: 0.05;
+}
+.marca-fondo::before {
+  width: 340px;
+  height: 340px;
+  top: -140px;
+  left: -140px;
+}
+.marca-fondo::after {
+  width: 220px;
+  height: 220px;
+  bottom: -110px;
+  right: -110px;
+  border-color: var(--color-brand-sky);
+  opacity: 0.08;
 }
 
 /* Entrada de la pantalla de login: un único momento coreografiado

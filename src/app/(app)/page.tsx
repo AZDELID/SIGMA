@@ -1,7 +1,28 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Alumno, Ciclo, MatriculaResumen } from "@/lib/types/database";
+<<<<<<< HEAD
 import { hoyLima, inicioMesLima } from "@/lib/utils/fecha";
+=======
+import {
+  hoyLima,
+  inicioDiaLima,
+  inicioDiaLimaDeFecha,
+  inicioMesLima,
+} from "@/lib/utils/fecha";
+import { IconoPersona, IconoReloj, IconoMoneda, IconoAlerta } from "./iconos-dashboard";
+
+const ACENTO = {
+  navy: { borde: "border-l-brand-900", fondo: "bg-brand-900/10", texto: "text-brand-900" },
+  sky: { borde: "border-l-brand-sky", fondo: "bg-brand-sky/15", texto: "text-brand-sky-dark" },
+  verde: { borde: "border-l-green-600", fondo: "bg-green-100", texto: "text-green-700" },
+  amarillo: {
+    borde: "border-l-brand-yellow",
+    fondo: "bg-brand-yellow-100",
+    texto: "text-brand-yellow-dark",
+  },
+} as const;
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
 
 type PagoReciente = {
   id: string;
@@ -119,37 +140,67 @@ export default async function InicioPage({
       label: "Alumnos activos",
       valor: alumnosActivos ?? 0,
       href: "/alumnos",
+<<<<<<< HEAD
       tono: "neutro",
+=======
+      icono: IconoPersona,
+      acento: ACENTO.navy,
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
     },
     {
       label: "Asistencias hoy",
       valor: asistenciasHoy ?? 0,
       href: "/asistencia",
+<<<<<<< HEAD
       tono: "neutro",
+=======
+      icono: IconoReloj,
+      acento: ACENTO.sky,
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
     },
     {
       label: "Cobrado hoy",
       valor: `S/ ${cobradoHoy.toFixed(2)}`,
       href: "/pagos",
+<<<<<<< HEAD
       tono: "positivo",
+=======
+      icono: IconoMoneda,
+      acento: ACENTO.verde,
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
     },
     {
       label: "Cobrado este mes",
       valor: `S/ ${cobradoMes.toFixed(2)}`,
       href: "/pagos",
+<<<<<<< HEAD
       tono: "positivo",
+=======
+      icono: IconoMoneda,
+      acento: ACENTO.verde,
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
     },
     {
       label: "Alumnos con saldo pendiente",
       valor: conSaldo.length,
       href: "/pagos",
+<<<<<<< HEAD
       tono: "alerta",
+=======
+      icono: IconoAlerta,
+      acento: ACENTO.amarillo,
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
     },
     {
       label: "Deuda total pendiente",
       valor: `S/ ${deudaTotal.toFixed(2)}`,
       href: "/pagos",
+<<<<<<< HEAD
       tono: "alerta",
+=======
+      icono: IconoAlerta,
+      acento: ACENTO.amarillo,
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
     },
   ] as const;
 
@@ -162,7 +213,11 @@ export default async function InicioPage({
   return (
     <div className="space-y-10">
       <div>
+<<<<<<< HEAD
         <h1 className="text-lg font-semibold text-brand-ink">Inicio</h1>
+=======
+        <h1 className="text-xl font-bold text-brand-900">Inicio</h1>
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
         <p className="text-sm text-brand-600">
           Resumen del día — {new Date().toLocaleDateString("es-PE", {
             timeZone: "America/Lima",
@@ -176,12 +231,28 @@ export default async function InicioPage({
           <Link
             key={t.label}
             href={t.href}
+<<<<<<< HEAD
             className="rounded-lg border border-brand-200 bg-brand-surface p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
           >
             <p className="text-xs text-brand-600">{t.label}</p>
             <p className={`mt-2 text-2xl font-semibold ${tonoValor[t.tono]}`}>
               {t.valor}
             </p>
+=======
+            className={`flex items-start gap-3 rounded-lg border border-l-4 border-brand-200 bg-white p-4 shadow-sm shadow-brand-900/5 transition-all hover:-translate-y-0.5 hover:shadow-md ${t.acento.borde}`}
+          >
+            <span
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${t.acento.fondo}`}
+            >
+              <t.icono className={`h-[18px] w-[18px] ${t.acento.texto}`} />
+            </span>
+            <span className="min-w-0">
+              <p className="text-xs text-brand-600">{t.label}</p>
+              <p className="font-display mt-0.5 text-2xl font-bold text-brand-900">
+                {t.valor}
+              </p>
+            </span>
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
           </Link>
         ))}
       </div>

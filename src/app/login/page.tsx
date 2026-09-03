@@ -30,9 +30,15 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initialState);
 
   return (
+<<<<<<< HEAD
     <div className="flex min-h-screen items-center justify-center bg-brand-50 px-4">
       <div className="w-full max-w-sm overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
         <div className="franja-marca h-1.5 animate-login-sweep" />
+=======
+    <div className="marca-fondo flex min-h-screen items-center justify-center bg-brand-50 px-4">
+      <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-lg border border-brand-200 bg-white shadow-md shadow-brand-900/10">
+        <div className="franja-marca h-1.5" />
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
         <div className="p-8">
           <div className="relative mb-4 flex justify-center">
             <div

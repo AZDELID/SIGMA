@@ -63,7 +63,11 @@ export default async function AsistenciaPage({
   return (
     <div className="space-y-6">
       <div>
+<<<<<<< HEAD
         <h1 className="text-lg font-semibold text-brand-ink">Asistencia</h1>
+=======
+        <h1 className="text-xl font-bold text-brand-900">Asistencia</h1>
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
         <p className="text-sm text-brand-600">
           {vista === "escaneo"
             ? "Escanea el carnet para registrar la entrada."

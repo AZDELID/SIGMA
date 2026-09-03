@@ -15,7 +15,11 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
             <nav className="flex items-center gap-1">
               <Link href="/" className="mr-4 flex items-center gap-2">
                 <Image src="/logo.png" alt="SIGMA" width={32} height={32} />
+<<<<<<< HEAD
                 <span className="text-sm font-semibold text-brand-ink">
+=======
+                <span className="font-display text-base font-bold tracking-tight text-brand-900">
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
                   SIGMA
                 </span>
               </Link>

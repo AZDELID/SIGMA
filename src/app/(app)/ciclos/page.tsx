@@ -14,7 +14,11 @@ export default async function CiclosPage() {
   return (
     <div className="space-y-6">
       <div>
+<<<<<<< HEAD
         <h1 className="text-lg font-semibold text-brand-ink">Ciclos</h1>
+=======
+        <h1 className="text-xl font-bold text-brand-900">Ciclos</h1>
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
         <p className="text-sm text-brand-600">
           Los planes/periodos en los que se matriculan los alumnos.
         </p>

@@ -44,6 +44,9 @@ export async function crearSimulacro(
     ) {
       return { error: "Cada materia seleccionada necesita un puntaje máximo válido." };
     }
+    if (m.puntaje_maximo > 20) {
+      return { error: "El puntaje máximo de una materia no puede pasar de 20." };
+    }
   }
 
   const supabase = await createClient();
@@ -67,6 +70,7 @@ export type GuardarPuntajesState = { error: string | null; ok?: boolean };
 export async function guardarPuntajes(
   simulacroId: string,
   simulacroMateriaId: string,
+  puntajeMaximo: number,
   _prevState: GuardarPuntajesState,
   formData: FormData
 ): Promise<GuardarPuntajesState> {
@@ -86,6 +90,11 @@ export async function guardarPuntajes(
     const puntaje = Number(raw);
     if (Number.isNaN(puntaje) || puntaje < 0) {
       return { error: "Uno de los puntajes ingresados no es un número válido." };
+    }
+    if (puntaje > puntajeMaximo) {
+      return {
+        error: `Ningún puntaje puede superar el máximo de esta materia (${puntajeMaximo}).`,
+      };
     }
 
     entradas.push({

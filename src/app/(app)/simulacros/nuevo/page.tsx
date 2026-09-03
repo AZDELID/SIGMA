@@ -21,7 +21,11 @@ export default async function NuevoSimulacroPage() {
         <Link href="/simulacros" className="text-sm text-brand-600 hover:text-brand-ink">
           ← Notas
         </Link>
+<<<<<<< HEAD
         <h1 className="mt-1 text-lg font-semibold text-brand-ink">
+=======
+        <h1 className="mt-1 text-xl font-bold text-brand-900">
+>>>>>>> a40aa8d8044f1cbdfc09716e5f67653bd8770067
           Nuevo simulacro
         </h1>
       </div>
