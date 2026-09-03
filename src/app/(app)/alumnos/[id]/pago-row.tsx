@@ -30,7 +30,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
                 type="date"
                 defaultValue={pago.fecha_pago}
                 required
-                className="rounded-md border border-brand-300 bg-white px-2 py-1.5 text-sm text-black"
+                className="rounded-md border border-brand-300 bg-brand-surface px-2 py-1.5 text-sm text-brand-field"
               />
             </div>
             <div>
@@ -44,7 +44,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
                 step="0.01"
                 defaultValue={pago.monto}
                 required
-                className="w-28 rounded-md border border-brand-300 bg-white px-2 py-1.5 text-sm text-black"
+                className="w-28 rounded-md border border-brand-300 bg-brand-surface px-2 py-1.5 text-sm text-brand-field"
               />
             </div>
             <div>
@@ -54,7 +54,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
               <select
                 name="metodo_pago"
                 defaultValue={pago.metodo_pago}
-                className="rounded-md border border-brand-300 bg-white px-2 py-1.5 text-sm text-black"
+                className="rounded-md border border-brand-300 bg-brand-surface px-2 py-1.5 text-sm text-brand-field"
               >
                 <option value="efectivo">Efectivo</option>
                 <option value="yape">Yape</option>
@@ -70,7 +70,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
               <input
                 name="numero_comprobante"
                 defaultValue={pago.numero_comprobante ?? ""}
-                className="rounded-md border border-brand-300 bg-white px-2 py-1.5 text-sm text-black"
+                className="rounded-md border border-brand-300 bg-brand-surface px-2 py-1.5 text-sm text-brand-field"
               />
             </div>
             <button
@@ -83,7 +83,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
             <button
               type="button"
               onClick={() => setEditando(false)}
-              className="text-xs text-brand-600 hover:text-brand-900"
+              className="text-xs text-brand-600 hover:text-brand-ink"
             >
               Cancelar
             </button>
@@ -99,7 +99,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
   return (
     <tr>
       <td className="px-4 py-2 text-brand-600">{pago.fecha_pago}</td>
-      <td className="px-4 py-2 font-medium text-green-700">
+      <td className="px-4 py-2 font-medium text-brand-success">
         S/ {Number(pago.monto).toFixed(2)}
       </td>
       <td className="px-4 py-2 text-brand-600 capitalize">{pago.metodo_pago}</td>
@@ -107,7 +107,7 @@ export function PagoRow({ pago }: { pago: Pago }) {
         <button
           type="button"
           onClick={() => setEditando(true)}
-          className="mr-3 text-xs text-brand-600 hover:text-brand-900"
+          className="mr-3 text-xs text-brand-600 hover:text-brand-ink"
         >
           Editar
         </button>

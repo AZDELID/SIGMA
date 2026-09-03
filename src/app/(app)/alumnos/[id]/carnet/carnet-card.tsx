@@ -39,7 +39,7 @@ function InfoRow({
         <p className="truncate text-[5.5px] font-medium leading-none tracking-wide text-brand-600">
           {label}
         </p>
-        <p className="mt-[1px] truncate text-[8px] font-bold leading-none text-brand-900">
+        <p className="mt-[1px] truncate text-[8px] font-bold leading-none text-brand-ink">
           {value}
         </p>
       </div>
@@ -103,7 +103,7 @@ function Encabezado({
         <p className="truncate text-[5.5px] leading-none text-brand-700">
           Academia Pre Universitaria
         </p>
-        <p className={`truncate font-extrabold leading-none text-brand-900 ${tituloTam}`}>
+        <p className={`truncate font-extrabold leading-none text-brand-ink ${tituloTam}`}>
           SIGMA
         </p>
         <p className="truncate text-[5px] leading-none text-brand-600">{TAGLINE}</p>
@@ -162,10 +162,10 @@ export function CarnetHorizontal({ datos }: { datos: DatosCarnet }) {
       </div>
 
       <div className="flex items-center justify-between gap-2 overflow-hidden px-2.5">
-        <p className="min-w-0 truncate text-[10px] font-bold leading-none text-brand-900">
+        <p className="min-w-0 truncate text-[10px] font-bold leading-none text-brand-ink">
           {nombreCompleto}
         </p>
-        <div className="flex shrink-0 items-center gap-1 text-brand-900">
+        <div className="flex shrink-0 items-center gap-1 text-brand-ink">
           <IconoBirrete className="h-[8px] w-[8px]" />
           <IconoEngranaje className="h-[8px] w-[8px]" />
           <IconoLibro className="h-[8px] w-[8px]" />
@@ -196,7 +196,7 @@ export function CarnetVertical({ datos }: { datos: DatosCarnet }) {
       </div>
 
       <div className="relative z-10 flex items-center justify-center overflow-hidden px-2">
-        <p className="truncate text-center text-[10px] font-bold leading-none text-brand-900">
+        <p className="truncate text-center text-[10px] font-bold leading-none text-brand-ink">
           {nombreCompleto}
         </p>
       </div>
@@ -208,7 +208,7 @@ export function CarnetVertical({ datos }: { datos: DatosCarnet }) {
         >
           ACADEMIA SIGMA
         </p>
-        <div className="flex shrink-0 flex-col items-center justify-center gap-[0.15cm] text-brand-900">
+        <div className="flex shrink-0 flex-col items-center justify-center gap-[0.15cm] text-brand-ink">
           <IconoBirrete className="h-[0.28cm] w-[0.28cm]" />
           <IconoEngranaje className="h-[0.28cm] w-[0.28cm]" />
           <IconoLibro className="h-[0.28cm] w-[0.28cm]" />

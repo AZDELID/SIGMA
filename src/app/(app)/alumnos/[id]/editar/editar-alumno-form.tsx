@@ -33,7 +33,7 @@ export function EditarAlumnoForm({
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="foto_url" value={fotoUrl} />
 
-      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:grid-cols-2">
+      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-brand-surface p-4 sm:grid-cols-2">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Datos del alumno
         </legend>
@@ -45,7 +45,7 @@ export function EditarAlumnoForm({
             name="nombres"
             required
             defaultValue={alumno.nombres}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div>
@@ -56,7 +56,7 @@ export function EditarAlumnoForm({
             name="apellidos"
             required
             defaultValue={alumno.apellidos}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div>
@@ -71,7 +71,7 @@ export function EditarAlumnoForm({
             inputMode="numeric"
             maxLength={8}
             defaultValue={alumno.dni}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
           <p className="mt-1 text-xs text-brand-yellow-dark">
             Si lo cambias, el código del alumno (código {alumno.codigo}) se
@@ -87,7 +87,7 @@ export function EditarAlumnoForm({
             type="date"
             max={new Date().toISOString().slice(0, 10)}
             defaultValue={alumno.fecha_nacimiento ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div>
@@ -101,7 +101,7 @@ export function EditarAlumnoForm({
             inputMode="numeric"
             maxLength={9}
             defaultValue={alumno.telefono ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div>
@@ -115,7 +115,7 @@ export function EditarAlumnoForm({
             inputMode="numeric"
             maxLength={9}
             defaultValue={alumno.telefono_apoderado ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
           <label className="mt-1.5 flex items-center gap-1.5 text-xs text-brand-700">
             <input
@@ -133,7 +133,7 @@ export function EditarAlumnoForm({
           <input
             name="direccion"
             defaultValue={alumno.direccion ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div className="sm:col-span-2">
@@ -141,7 +141,7 @@ export function EditarAlumnoForm({
         </div>
       </fieldset>
 
-      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:grid-cols-3">
+      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-brand-surface p-4 sm:grid-cols-3">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Postulación
         </legend>
@@ -153,7 +153,7 @@ export function EditarAlumnoForm({
             name="turno"
             required
             defaultValue={alumno.turno ?? ""}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           >
             <option value="" disabled>
               Selecciona
@@ -174,7 +174,7 @@ export function EditarAlumnoForm({
               setAreaId(e.target.value);
               setCarreraId("");
             }}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           >
             <option value="">Selecciona un área</option>
             {areas.map((a) => (
@@ -194,7 +194,7 @@ export function EditarAlumnoForm({
             value={carreraId}
             onChange={(e) => setCarreraId(e.target.value)}
             disabled={!areaId}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black disabled:bg-brand-50"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field disabled:bg-brand-50"
           >
             <option value="">
               {areaId ? "Selecciona una carrera" : "Elige un área primero"}

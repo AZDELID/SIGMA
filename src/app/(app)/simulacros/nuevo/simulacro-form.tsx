@@ -46,7 +46,7 @@ export function SimulacroForm({
 
   return (
     <form action={handleSubmit} className="space-y-4">
-      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:grid-cols-3">
+      <fieldset className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-brand-surface p-4 sm:grid-cols-3">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Datos del simulacro
         </legend>
@@ -58,7 +58,7 @@ export function SimulacroForm({
             name="nombre"
             required
             placeholder="Simulacro 3"
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div>
@@ -69,7 +69,7 @@ export function SimulacroForm({
             name="fecha"
             type="date"
             defaultValue={new Date().toISOString().slice(0, 10)}
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           />
         </div>
         <div className="sm:col-span-3">
@@ -79,7 +79,7 @@ export function SimulacroForm({
           <select
             name="ciclo_id"
             required
-            className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+            className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
           >
             <option value="">Selecciona un ciclo</option>
             {ciclos.map((c) => (
@@ -91,7 +91,7 @@ export function SimulacroForm({
         </div>
       </fieldset>
 
-      <fieldset className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
+      <fieldset className="rounded-lg border border-brand-200 bg-brand-surface p-4">
         <legend className="px-1 text-sm font-medium text-brand-700">
           Materias evaluadas
         </legend>
@@ -109,7 +109,7 @@ export function SimulacroForm({
                   onChange={() => toggle(m.id)}
                   className="h-4 w-4"
                 />
-                <span className="w-40 text-sm text-brand-900">{m.nombre}</span>
+                <span className="w-40 text-sm text-brand-ink">{m.nombre}</span>
                 <label className="text-xs text-brand-600">Puntaje máximo</label>
                 <input
                   type="number"
@@ -118,7 +118,7 @@ export function SimulacroForm({
                   disabled={!seleccion[m.id]?.incluida}
                   value={seleccion[m.id]?.puntajeMaximo ?? "20"}
                   onChange={(e) => setPuntaje(m.id, e.target.value)}
-                  className="w-24 rounded-md border border-brand-300 bg-white px-2 py-1 text-sm text-black disabled:bg-brand-50 disabled:text-brand-400"
+                  className="w-24 rounded-md border border-brand-300 bg-brand-surface px-2 py-1 text-sm text-brand-field disabled:bg-brand-50 disabled:text-brand-400"
                 />
               </div>
             ))}

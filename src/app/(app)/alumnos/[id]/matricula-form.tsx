@@ -33,7 +33,7 @@ export function MatriculaForm({
         <select
           name="ciclo_id"
           required
-          className="rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         >
           {ciclosDisponibles.map((c) => (
             <option key={c.id} value={c.id}>
@@ -52,7 +52,7 @@ export function MatriculaForm({
           min="0"
           step="0.01"
           required
-          className="w-32 rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-32 rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         />
       </div>
       <button

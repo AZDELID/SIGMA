@@ -13,7 +13,7 @@ export default async function MateriasPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Materias</h1>
+        <h1 className="text-lg font-semibold text-brand-ink">Materias</h1>
         <p className="text-sm text-brand-600">
           Cursos que se evalúan en los simulacros (Aritmética, Álgebra, Lenguaje...).
         </p>
@@ -21,12 +21,12 @@ export default async function MateriasPage() {
 
       <MateriaForm />
 
-      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+      <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
         <table className="w-full text-sm">
           <tbody className="divide-y divide-brand-100">
             {materias?.map((m) => (
               <tr key={m.id} className="transition-colors hover:bg-brand-50">
-                <td className="px-4 py-2 font-medium text-brand-900">{m.nombre}</td>
+                <td className="px-4 py-2 font-medium text-brand-ink">{m.nombre}</td>
               </tr>
             ))}
             {materias?.length === 0 && (

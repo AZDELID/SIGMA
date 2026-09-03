@@ -1,180 +1,184 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import type { Alumno, TipoAsistencia } from "@/lib/types/database";
-import { inicioDiaLima } from "@/lib/utils/fecha";
+import { hoyLima } from "@/lib/utils/fecha";
+import { BuscarAlumnoManual } from "./buscar-alumno-manual";
 import { CodigoForm } from "./codigo-form";
+import { EliminarAsistenciaBoton } from "./eliminar-asistencia-boton";
 import { MarcarManualBoton } from "./marcar-manual-boton";
-import { TipoSelector } from "./tipo-selector";
-import {
-  ETIQUETA_TIPO_ASISTENCIA as ETIQUETA,
-  COLOR_TIPO_ASISTENCIA as COLOR_TIPO,
-} from "@/lib/utils/asistencia-labels";
 
-type AsistenciaHoy = {
+type RegistroHoy = {
   id: string;
-  marcado_en: string;
-  metodo: "codigo" | "manual";
-  tipo: TipoAsistencia;
-  alumnos: { nombres: string; apellidos: string; codigo: string };
+  alumno_id: string;
+  entrada_en: string | null;
+  salida_en: string | null;
+  permiso: boolean;
+  alumnos: {
+    nombres: string;
+    apellidos: string;
+    codigo: string;
+    telefono_apoderado: string | null;
+    tiene_whatsapp: boolean;
+  };
 };
 
-const TIPOS_VALIDOS: TipoAsistencia[] = ["entrada", "salida", "permiso"];
+const VISTAS_VALIDAS = ["escaneo", "hoy"] as const;
+type Vista = (typeof VISTAS_VALIDAS)[number];
+
+function hora(iso: string | null) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleTimeString("es-PE", { timeZone: "America/Lima" });
+}
 
 export default async function AsistenciaPage({
   searchParams,
 }: PageProps<"/asistencia">) {
-  const { buscar, tipo: tipoParam } = await searchParams;
-  const query = typeof buscar === "string" ? buscar.trim() : "";
-  const tipo: TipoAsistencia =
-    typeof tipoParam === "string" &&
-    TIPOS_VALIDOS.includes(tipoParam as TipoAsistencia)
-      ? (tipoParam as TipoAsistencia)
-      : "entrada";
+  const { vista: vistaParam } = await searchParams;
+  const vista: Vista =
+    typeof vistaParam === "string" &&
+    VISTAS_VALIDAS.includes(vistaParam as Vista)
+      ? (vistaParam as Vista)
+      : "escaneo";
 
   const supabase = await createClient();
 
-  const [{ data: alumnosEncontrados }, { data: asistenciasHoy }] =
-    await Promise.all([
-      query
-        ? supabase
-            .from("alumnos")
-            .select("*")
-            .eq("activo", true)
-            .or(
-              `nombres.ilike.%${query}%,apellidos.ilike.%${query}%,dni.ilike.%${query}%`
-            )
-            .limit(10)
-            .returns<Alumno[]>()
-        : Promise.resolve({ data: [] as Alumno[] }),
-      supabase
-        .from("asistencias")
-        .select("id, marcado_en, metodo, tipo, alumnos!inner(nombres, apellidos, codigo)")
-        .gte("marcado_en", inicioDiaLima().toISOString())
-        .order("marcado_en", { ascending: false })
-        .returns<AsistenciaHoy[]>(),
-    ]);
+  const { data: registrosHoy } = await supabase
+    .from("asistencias")
+    .select(
+      "id, alumno_id, entrada_en, salida_en, permiso, alumnos!inner(nombres, apellidos, codigo, telefono_apoderado, tiene_whatsapp)"
+    )
+    .eq("fecha", hoyLima())
+    .order("entrada_en", { ascending: false, nullsFirst: false })
+    .returns<RegistroHoy[]>();
+
+  const alumnosConEntradaHoy = (registrosHoy ?? [])
+    .filter((r) => r.entrada_en)
+    .map((r) => r.alumno_id);
+
+  function hrefVista(v: Vista) {
+    const params = new URLSearchParams();
+    params.set("vista", v);
+    return `/asistencia?${params.toString()}`;
+  }
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Asistencia</h1>
+        <h1 className="text-lg font-semibold text-brand-ink">Asistencia</h1>
         <p className="text-sm text-brand-600">
-          Elige qué vas a registrar, luego escanea el carnet o búscalo manualmente.
+          {vista === "escaneo"
+            ? "Escanea el carnet para registrar la entrada."
+            : "Un registro por alumno — marcar salida o permiso actualiza su registro de hoy."}
         </p>
       </div>
 
-      <TipoSelector tipoActual={tipo} query={query} />
+      <div className="inline-flex rounded-md border border-brand-300 bg-brand-surface p-1">
+        <Link
+          href={hrefVista("escaneo")}
+          className={
+            vista === "escaneo"
+              ? "rounded px-4 py-1.5 text-sm font-medium bg-brand-900 text-white"
+              : "rounded px-4 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-100"
+          }
+        >
+          Escaneo
+        </Link>
+        <Link
+          href={hrefVista("hoy")}
+          className={
+            vista === "hoy"
+              ? "rounded px-4 py-1.5 text-sm font-medium bg-brand-900 text-white"
+              : "rounded px-4 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-100"
+          }
+        >
+          Asistencias de hoy ({registrosHoy?.length ?? 0})
+        </Link>
+      </div>
 
-      <CodigoForm tipo={tipo} />
+      {vista === "escaneo" ? (
+        <section className="max-w-xl space-y-4">
+          <CodigoForm />
 
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">
-          Búsqueda manual
-        </h2>
-        <form className="flex gap-2">
-          <input type="hidden" name="tipo" value={tipo} />
-          <input
-            type="search"
-            name="buscar"
-            defaultValue={query}
-            placeholder="Buscar por nombre, apellido o DNI..."
-            className="w-full max-w-md rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
-          />
-          <button
-            type="submit"
-            className="rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-brand-700 hover:bg-brand-100"
-          >
-            Buscar
-          </button>
-        </form>
-
-        {query && (
-          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
-            <table className="w-full text-sm">
-              <tbody className="divide-y divide-brand-100">
-                {alumnosEncontrados?.map((alumno) => (
-                  <tr key={alumno.id} className="transition-colors hover:bg-brand-50">
-                    <td className="px-4 py-2 font-mono text-xs text-brand-600">
-                      {alumno.codigo}
-                    </td>
-                    <td className="px-4 py-2 font-medium text-brand-900">
-                      {alumno.apellidos}, {alumno.nombres}
-                    </td>
-                    <td className="px-4 py-2 text-right">
-                      <MarcarManualBoton
-                        alumnoId={alumno.id}
-                        nombreCompleto={`${alumno.nombres} ${alumno.apellidos}`}
-                        telefonoApoderado={alumno.telefono_apoderado}
-                        tieneWhatsapp={alumno.tiene_whatsapp}
-                        tipo={tipo}
-                      />
-                    </td>
-                  </tr>
-                ))}
-                {alumnosEncontrados?.length === 0 && (
-                  <tr>
-                    <td colSpan={3} className="px-4 py-6 text-center text-brand-400">
-                      No se encontraron alumnos.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">
-          Asistencias de hoy ({asistenciasHoy?.length ?? 0})
-        </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+          <details className="rounded-lg border border-brand-200 bg-brand-surface">
+            <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-700">
+              ¿No tiene el carnet? Buscar manualmente
+            </summary>
+            <div className="border-t border-brand-100 p-4 pt-3">
+              <BuscarAlumnoManual alumnosConEntradaHoy={alumnosConEntradaHoy} />
+            </div>
+          </details>
+        </section>
+      ) : (
+        <section className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
           <table className="w-full text-sm">
             <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
-                <th className="px-4 py-2">Hora</th>
-                <th className="px-4 py-2">Alumno</th>
                 <th className="px-4 py-2">Código</th>
-                <th className="px-4 py-2">Tipo</th>
-                <th className="px-4 py-2">Método</th>
+                <th className="px-4 py-2">Alumno</th>
+                <th className="px-4 py-2">Hora de entrada</th>
+                <th className="px-4 py-2">Hora de salida</th>
+                <th className="px-4 py-2">Permiso</th>
+                <th className="px-4 py-2">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-100">
-              {asistenciasHoy?.map((a) => (
-                <tr key={a.id} className="transition-colors hover:bg-brand-50">
-                  <td className="px-4 py-2 text-brand-600">
-                    {new Date(a.marcado_en).toLocaleTimeString("es-PE", {
-                      timeZone: "America/Lima",
-                    })}
-                  </td>
-                  <td className="px-4 py-2 text-brand-900">
-                    {a.alumnos.apellidos}, {a.alumnos.nombres}
-                  </td>
-                  <td className="px-4 py-2 font-mono text-xs text-brand-600">
-                    {a.alumnos.codigo}
-                  </td>
-                  <td className="px-4 py-2">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs ${COLOR_TIPO[a.tipo]}`}
-                    >
-                      {ETIQUETA[a.tipo]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-brand-600">
-                    {a.metodo === "codigo" ? "Código" : "Manual"}
-                  </td>
-                </tr>
-              ))}
-              {asistenciasHoy?.length === 0 && (
+              {registrosHoy?.map((r) => {
+                const nombreCompleto = `${r.alumnos.nombres} ${r.alumnos.apellidos}`;
+                return (
+                  <tr key={r.id} className="transition-colors hover:bg-brand-50">
+                    <td className="px-4 py-2 font-mono text-xs text-brand-600">
+                      {r.alumnos.codigo}
+                    </td>
+                    <td className="px-4 py-2 text-brand-ink">{nombreCompleto}</td>
+                    <td className="px-4 py-2 text-brand-600">{hora(r.entrada_en)}</td>
+                    <td className="px-4 py-2 text-brand-600">{hora(r.salida_en)}</td>
+                    <td className="px-4 py-2">
+                      {r.permiso ? (
+                        <span className="rounded-full bg-brand-yellow-100 px-2 py-0.5 text-xs text-brand-yellow-dark">
+                          Sí
+                        </span>
+                      ) : (
+                        <span className="text-brand-400">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex items-center justify-end gap-3">
+                        <div className="flex gap-2">
+                          <MarcarManualBoton
+                            alumnoId={r.alumno_id}
+                            nombreCompleto={nombreCompleto}
+                            telefonoApoderado={r.alumnos.telefono_apoderado}
+                            tieneWhatsapp={r.alumnos.tiene_whatsapp}
+                            tipo="salida"
+                            marcado={!!r.salida_en}
+                            bloqueadoPor={r.permiso ? "Permiso" : undefined}
+                          />
+                          <MarcarManualBoton
+                            alumnoId={r.alumno_id}
+                            nombreCompleto={nombreCompleto}
+                            telefonoApoderado={r.alumnos.telefono_apoderado}
+                            tieneWhatsapp={r.alumnos.tiene_whatsapp}
+                            tipo="permiso"
+                            marcado={r.permiso}
+                            bloqueadoPor={r.salida_en ? "Salida" : undefined}
+                          />
+                        </div>
+                        <EliminarAsistenciaBoton id={r.id} nombreCompleto={nombreCompleto} />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+              {registrosHoy?.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-brand-400">
+                  <td colSpan={6} className="px-4 py-6 text-center text-brand-400">
                     Todavía no hay asistencias marcadas hoy.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

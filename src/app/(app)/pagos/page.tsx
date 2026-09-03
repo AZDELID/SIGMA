@@ -45,7 +45,7 @@ export default async function PagosPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Pagos</h1>
+        <h1 className="text-lg font-semibold text-brand-ink">Pagos</h1>
         <p className="text-sm text-brand-600">
           Registra abonos contra la matrícula de un alumno.
         </p>
@@ -57,10 +57,10 @@ export default async function PagosPage({
       />
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">
+        <h2 className="text-sm font-semibold text-brand-ink">
           Últimos pagos registrados
         </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
           <table className="w-full text-sm">
             <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
@@ -76,7 +76,7 @@ export default async function PagosPage({
               {pagosRecientes?.map((pago) => (
                 <tr key={pago.id} className="transition-colors hover:bg-brand-50">
                   <td className="px-4 py-2 text-brand-600">{pago.fecha_pago}</td>
-                  <td className="px-4 py-2 text-brand-900">
+                  <td className="px-4 py-2 text-brand-ink">
                     <Link
                       href={`/alumnos/${pago.matriculas.alumno_id}`}
                       className="hover:text-brand-700 hover:underline"
@@ -87,7 +87,7 @@ export default async function PagosPage({
                   <td className="px-4 py-2 text-brand-600">
                     {pago.matriculas.ciclos.nombre}
                   </td>
-                  <td className="px-4 py-2 font-medium text-brand-900">
+                  <td className="px-4 py-2 font-medium text-brand-ink">
                     S/ {Number(pago.monto).toFixed(2)}
                   </td>
                   <td className="px-4 py-2 text-brand-600 capitalize">

@@ -4,12 +4,14 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { marcarPorCodigo, type MarcarPorCodigoState } from "./actions";
 import { QrScanner } from "./qr-scanner";
 import { construirLinkAsistenciaWhatsapp } from "@/lib/utils/whatsapp";
-import { ETIQUETA_TIPO_ASISTENCIA as ETIQUETA } from "@/lib/utils/asistencia-labels";
-import type { TipoAsistencia } from "@/lib/types/database";
 
 const initialState: MarcarPorCodigoState = { error: null };
 
-export function CodigoForm({ tipo }: { tipo: TipoAsistencia }) {
+function horaLima(iso: string) {
+  return new Date(iso).toLocaleTimeString("es-PE", { timeZone: "America/Lima" });
+}
+
+export function CodigoForm() {
   const [state, formAction, pending] = useActionState(
     marcarPorCodigo,
     initialState
@@ -28,35 +30,35 @@ export function CodigoForm({ tipo }: { tipo: TipoAsistencia }) {
     setMostrarCamara(false);
     const fd = new FormData();
     fd.set("codigo", codigo);
-    fd.set("tipo", tipo);
     formAction(fd);
   }
 
   return (
-    <div className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
-      <form action={formAction} className="flex gap-2">
-        <input type="hidden" name="tipo" value={tipo} />
+    <div className="rounded-lg border border-brand-200 bg-brand-surface p-4">
+      <form action={formAction} className="space-y-2">
         <input
           ref={inputRef}
           name="codigo"
           autoFocus
           autoComplete="off"
-          placeholder={`Escanea el carnet o escribe el código y presiona Enter (${ETIQUETA[tipo]})`}
-          className="flex-1 rounded-md border border-brand-300 bg-white px-3 py-3 text-base text-black"
+          placeholder="Escanea el carnet o escribe el código (Entrada)"
+          className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-3 text-base text-brand-field"
         />
-        <button
-          type="submit"
-          className="rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98]"
-        >
-          Marcar
-        </button>
-        <button
-          type="button"
-          onClick={() => setMostrarCamara((v) => !v)}
-          className="rounded-md border border-brand-300 bg-white px-4 py-2 text-sm font-medium text-brand-700 hover:bg-brand-100"
-        >
-          📷 Escanear con cámara
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="flex-1 rounded-md bg-brand-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-shadow hover:bg-brand-800 hover:shadow-md active:scale-[0.98]"
+          >
+            Marcar
+          </button>
+          <button
+            type="button"
+            onClick={() => setMostrarCamara((v) => !v)}
+            className="flex-1 rounded-md border border-brand-300 bg-brand-surface px-4 py-2 text-sm font-medium text-brand-700 hover:bg-brand-100"
+          >
+            📷 Cámara
+          </button>
+        </div>
       </form>
 
       {mostrarCamara && (
@@ -78,20 +80,20 @@ export function CodigoForm({ tipo }: { tipo: TipoAsistencia }) {
           className={
             state.ok.yaEstabaMarcado
               ? "mt-3 flex flex-wrap items-center gap-2 rounded-md bg-brand-yellow-50 px-3 py-2 text-sm text-brand-yellow-dark"
-              : "mt-3 flex flex-wrap items-center gap-2 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700"
+              : "mt-3 flex flex-wrap items-center gap-2 rounded-md bg-green-50 px-3 py-2 text-sm text-brand-success"
           }
         >
           <span>
             {state.ok.yaEstabaMarcado
-              ? `${state.ok.alumno} — ya tenía "${ETIQUETA[state.ok.tipo]}" registrada hoy, se registró otra.`
-              : `${ETIQUETA[state.ok.tipo]} registrada: ${state.ok.alumno}.`}
+              ? `${state.ok.alumno} — ya tenía la entrada registrada hoy a las ${horaLima(state.ok.entradaEn)}`
+              : `Entrada registrada: ${state.ok.alumno}.`}
           </span>
           {state.ok.telefonoApoderado && state.ok.tieneWhatsapp && (
             <a
               href={construirLinkAsistenciaWhatsapp(
                 state.ok.telefonoApoderado,
                 state.ok.alumno,
-                state.ok.tipo
+                "entrada"
               )}
               target="_blank"
               rel="noopener noreferrer"

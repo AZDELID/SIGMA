@@ -26,7 +26,7 @@ export function CerrarCicloBoton({
           });
         }
       }}
-      className="text-xs text-brand-600 hover:text-brand-900 disabled:opacity-50"
+      className="text-xs text-brand-600 hover:text-brand-ink disabled:opacity-50"
     >
       {pending ? "Cerrando..." : "Cerrar"}
     </button>

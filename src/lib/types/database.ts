@@ -65,12 +65,19 @@ export type Pago = {
 export type MetodoAsistencia = "codigo" | "manual";
 export type TipoAsistencia = "entrada" | "salida" | "permiso";
 
+/** Un registro por alumno y día — marcar salida o permiso actualiza este
+ * mismo registro en vez de crear uno nuevo. */
 export type Asistencia = {
   id: string;
   alumno_id: string;
-  marcado_en: string;
-  metodo: MetodoAsistencia;
-  tipo: TipoAsistencia;
+  fecha: string;
+  entrada_en: string | null;
+  entrada_metodo: MetodoAsistencia | null;
+  salida_en: string | null;
+  salida_metodo: MetodoAsistencia | null;
+  permiso: boolean;
+  permiso_en: string | null;
+  permiso_metodo: MetodoAsistencia | null;
   created_at: string;
 };
 

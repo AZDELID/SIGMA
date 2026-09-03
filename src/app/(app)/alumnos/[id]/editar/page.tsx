@@ -26,11 +26,11 @@ export default async function EditarAlumnoPage({
       <div>
         <Link
           href={`/alumnos/${alumno.id}`}
-          className="text-sm text-brand-600 hover:text-brand-900"
+          className="text-sm text-brand-600 hover:text-brand-ink"
         >
           ← Volver a la ficha
         </Link>
-        <h1 className="mt-1 text-lg font-semibold text-brand-900">
+        <h1 className="mt-1 text-lg font-semibold text-brand-ink">
           Editar alumno
         </h1>
       </div>

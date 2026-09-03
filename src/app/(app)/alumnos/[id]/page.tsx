@@ -14,10 +14,6 @@ import { generarQrDataUrl } from "@/lib/utils/qr";
 import { MatriculaForm } from "./matricula-form";
 import { EstadoAlumnoBoton } from "./estado-alumno-boton";
 import { PagoRow } from "./pago-row";
-import {
-  ETIQUETA_TIPO_ASISTENCIA as ETIQUETA,
-  COLOR_TIPO_ASISTENCIA as COLOR_TIPO,
-} from "@/lib/utils/asistencia-labels";
 
 export default async function AlumnoDetallePage({
   params,
@@ -43,7 +39,7 @@ export default async function AlumnoDetallePage({
       .from("asistencias")
       .select("*")
       .eq("alumno_id", id)
-      .order("marcado_en", { ascending: false })
+      .order("fecha", { ascending: false })
       .limit(10)
       .returns<Asistencia[]>(),
     supabase.from("ciclos").select("*").eq("activo", true).returns<Ciclo[]>(),
@@ -100,11 +96,11 @@ export default async function AlumnoDetallePage({
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/alumnos" className="text-sm text-brand-600 hover:text-brand-900">
+        <Link href="/alumnos" className="text-sm text-brand-600 hover:text-brand-ink">
           ← Alumnos
         </Link>
         <div className="mt-1 flex flex-wrap items-center gap-3">
-          <h1 className="text-lg font-semibold text-brand-900">
+          <h1 className="text-lg font-semibold text-brand-ink">
             {alumno.apellidos}, {alumno.nombres}
           </h1>
           <span className="font-mono text-xs text-brand-600">{alumno.codigo}</span>
@@ -116,7 +112,7 @@ export default async function AlumnoDetallePage({
           <div className="ml-auto flex items-center gap-2">
             <Link
               href={`/alumnos/${alumno.id}/editar`}
-              className="rounded-md border border-brand-300 bg-white px-3 py-1.5 text-sm text-brand-700 hover:bg-brand-100"
+              className="rounded-md border border-brand-300 bg-brand-surface px-3 py-1.5 text-sm text-brand-700 hover:bg-brand-100"
             >
               Editar
             </Link>
@@ -129,7 +125,7 @@ export default async function AlumnoDetallePage({
         </div>
       </div>
 
-      <section className="flex flex-col gap-4 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:flex-row">
+      <section className="flex flex-col gap-4 rounded-lg border border-brand-200 bg-brand-surface p-4 sm:flex-row">
         {alumno.foto_url && (
           <Image
             src={alumno.foto_url}
@@ -190,7 +186,7 @@ export default async function AlumnoDetallePage({
           <Link
             href={`/alumnos/${alumno.id}/carnet`}
             target="_blank"
-            className="text-xs text-brand-600 underline hover:text-brand-900"
+            className="text-xs text-brand-600 underline hover:text-brand-ink"
           >
             Ver carnet para imprimir
           </Link>
@@ -198,15 +194,15 @@ export default async function AlumnoDetallePage({
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-sm font-semibold text-brand-900">Matrículas</h2>
+        <h2 className="text-sm font-semibold text-brand-ink">Matrículas</h2>
 
         {matriculas?.map((m) => (
           <div
             key={m.matricula_id}
-            className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5"
+            className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-brand-100 bg-brand-50 px-4 py-2">
-              <p className="font-medium text-brand-900">{m.ciclo_nombre}</p>
+              <p className="font-medium text-brand-ink">{m.ciclo_nombre}</p>
               <div className="flex items-center gap-4 text-sm">
                 <span className="text-brand-600">
                   Pactado S/ {m.monto_pactado.toFixed(2)}
@@ -215,7 +211,7 @@ export default async function AlumnoDetallePage({
                   className={
                     m.saldo_pendiente > 0
                       ? "font-medium text-brand-yellow-dark"
-                      : "font-medium text-green-700"
+                      : "font-medium text-brand-success"
                   }
                 >
                   Saldo S/ {m.saldo_pendiente.toFixed(2)}
@@ -223,7 +219,7 @@ export default async function AlumnoDetallePage({
                 {m.saldo_pendiente > 0 && (
                   <Link
                     href={`/pagos?matricula=${m.matricula_id}`}
-                    className="text-xs text-brand-600 hover:text-brand-900"
+                    className="text-xs text-brand-600 hover:text-brand-ink"
                   >
                     Registrar pago
                   </Link>
@@ -247,7 +243,7 @@ export default async function AlumnoDetallePage({
           </div>
         ))}
         {matriculas?.length === 0 && (
-          <p className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 px-4 py-6 text-center text-brand-400">
+          <p className="rounded-lg border border-brand-200 bg-brand-surface px-4 py-6 text-center text-brand-400">
             Sin matrículas registradas.
           </p>
         )}
@@ -263,41 +259,51 @@ export default async function AlumnoDetallePage({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">
+        <h2 className="text-sm font-semibold text-brand-ink">
           Últimas asistencias
         </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
           <table className="w-full text-sm">
             <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
-                <th className="px-4 py-2">Fecha y hora</th>
-                <th className="px-4 py-2">Tipo</th>
-                <th className="px-4 py-2">Método</th>
+                <th className="px-4 py-2">Fecha</th>
+                <th className="px-4 py-2">Hora de entrada</th>
+                <th className="px-4 py-2">Hora de salida</th>
+                <th className="px-4 py-2">Permiso</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-100">
               {asistencias?.map((a) => (
                 <tr key={a.id} className="transition-colors hover:bg-brand-50">
+                  <td className="px-4 py-2 text-brand-600">{a.fecha}</td>
+                  <td className="px-4 py-2 text-brand-ink">
+                    {a.entrada_en
+                      ? new Date(a.entrada_en).toLocaleTimeString("es-PE", {
+                          timeZone: "America/Lima",
+                        })
+                      : "—"}
+                  </td>
                   <td className="px-4 py-2 text-brand-600">
-                    {new Date(a.marcado_en).toLocaleString("es-PE", {
-                      timeZone: "America/Lima",
-                    })}
+                    {a.salida_en
+                      ? new Date(a.salida_en).toLocaleTimeString("es-PE", {
+                          timeZone: "America/Lima",
+                        })
+                      : "—"}
                   </td>
                   <td className="px-4 py-2">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs ${COLOR_TIPO[a.tipo]}`}
-                    >
-                      {ETIQUETA[a.tipo]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-brand-600">
-                    {a.metodo === "codigo" ? "Código" : "Manual"}
+                    {a.permiso ? (
+                      <span className="rounded-full bg-brand-yellow-100 px-2 py-0.5 text-xs text-brand-yellow-dark">
+                        Sí
+                      </span>
+                    ) : (
+                      <span className="text-brand-400">—</span>
+                    )}
                   </td>
                 </tr>
               ))}
               {asistencias?.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="px-4 py-6 text-center text-brand-400">
+                  <td colSpan={4} className="px-4 py-6 text-center text-brand-400">
                     Sin registros de asistencia.
                   </td>
                 </tr>
@@ -308,8 +314,8 @@ export default async function AlumnoDetallePage({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">Notas</h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+        <h2 className="text-sm font-semibold text-brand-ink">Notas</h2>
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
           <table className="w-full text-sm">
             <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
@@ -322,7 +328,7 @@ export default async function AlumnoDetallePage({
             <tbody className="divide-y divide-brand-100">
               {resultados?.map((r) => (
                 <tr key={r.resultado_id} className="transition-colors hover:bg-brand-50">
-                  <td className="px-4 py-2 text-brand-900">
+                  <td className="px-4 py-2 text-brand-ink">
                     {r.simulacro_nombre}
                     <span className="ml-2 text-xs text-brand-600">
                       {r.simulacro_fecha}
@@ -332,7 +338,7 @@ export default async function AlumnoDetallePage({
                   <td className="px-4 py-2 text-center text-brand-600">
                     {r.puntaje_obtenido} / {r.puntaje_maximo}
                   </td>
-                  <td className="px-4 py-2 text-center font-medium text-brand-900">
+                  <td className="px-4 py-2 text-center font-medium text-brand-ink">
                     {r.nota}
                   </td>
                 </tr>

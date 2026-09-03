@@ -47,7 +47,7 @@ export default async function CarnetAlumnoPage({
     <div className="flex flex-col items-center gap-4 py-6 print:py-0">
       <Link
         href={`/alumnos/${alumno.id}`}
-        className="self-start text-sm text-brand-600 hover:text-brand-900 print:hidden"
+        className="self-start text-sm text-brand-600 hover:text-brand-ink print:hidden"
       >
         ← Volver
       </Link>

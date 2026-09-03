@@ -228,7 +228,7 @@ export function FotoCaptura({
                   pararCamara();
                   setEstado(previewUrl ? "listo" : "vacio");
                 }}
-                className="rounded-md border border-brand-300 bg-white px-3 py-1.5 text-xs text-brand-700 hover:bg-brand-100"
+                className="rounded-md border border-brand-300 bg-brand-surface px-3 py-1.5 text-xs text-brand-700 hover:bg-brand-100"
               >
                 Cancelar
               </button>
@@ -239,7 +239,7 @@ export function FotoCaptura({
                 type="button"
                 onClick={abrirCamara}
                 disabled={estado === "procesando"}
-                className="rounded-md border border-brand-300 bg-white px-3 py-1.5 text-xs text-brand-700 hover:bg-brand-100 disabled:opacity-50"
+                className="rounded-md border border-brand-300 bg-brand-surface px-3 py-1.5 text-xs text-brand-700 hover:bg-brand-100 disabled:opacity-50"
               >
                 📷 Tomar foto
               </button>
@@ -247,7 +247,7 @@ export function FotoCaptura({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={estado === "procesando"}
-                className="rounded-md border border-brand-300 bg-white px-3 py-1.5 text-xs text-brand-700 hover:bg-brand-100 disabled:opacity-50"
+                className="rounded-md border border-brand-300 bg-brand-surface px-3 py-1.5 text-xs text-brand-700 hover:bg-brand-100 disabled:opacity-50"
               >
                 {estado === "procesando" ? "Procesando..." : "Subir foto"}
               </button>

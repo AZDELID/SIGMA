@@ -22,11 +22,11 @@ export default async function NuevoAlumnoPage() {
       <div>
         <Link
           href="/alumnos"
-          className="text-sm text-brand-600 hover:text-brand-900"
+          className="text-sm text-brand-600 hover:text-brand-ink"
         >
           ← Alumnos
         </Link>
-        <h1 className="mt-1 text-lg font-semibold text-brand-900">
+        <h1 className="mt-1 text-lg font-semibold text-brand-ink">
           Nueva matrícula
         </h1>
       </div>

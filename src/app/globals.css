@@ -1,12 +1,71 @@
 @import "tailwindcss";
 
-/* SIGMA es una app de solo tema claro. Sin esto, el navegador aplica su
-   estilo nativo oscuro a inputs/selects cuando el sistema operativo está
-   en modo oscuro, dejando el texto invisible al escribir. */
 :root {
-  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  color-scheme: light dark;
+
+  /* Paleta de marca SIGMA — derivada de los 3 colores del logo. El 900
+     de cada escala es el color exacto pedido; el resto son mezclas hacia
+     blanco (fondos/bordes) o hacia negro (texto/hover) para que todo
+     siga siendo legible sobre fondo blanco.
+
+     Estas son variables planas (no --color-*) a propósito: @theme inline
+     más abajo las referencia con var(), así que solo hay que redefinir
+     ESTAS variables para el modo oscuro y cada clase de Tailwind que ya
+     use bg-brand-900/text-brand-ink/etc. cambia sola. Si en vez de esto
+     el hex fuera literal dentro de @theme inline, Tailwind lo hornea
+     dentro de cada .clase-generada en vez de referenciar la variable, y
+     el modo oscuro dejaría de tener efecto. */
+  --brand-50: #f5f5fa;
+  --brand-100: #ececf4;
+  --brand-200: #dcddec;
+  --brand-300: #a8a9ce;
+  --brand-400: #9596c4;
+  --brand-500: #7c7db6;
+  --brand-600: #6566a9;
+  --brand-700: #5557a0;
+  --brand-800: #4a4c99;
+  --brand-900: #3e4093; /* azul del logo — fondo de botones/acentos */
+
+  /* Roles de texto/superficie separados de brand-900/white/black: en modo
+     oscuro un botón sólido y el texto de encabezado ya no pueden compartir
+     el mismo valor (uno debe seguir vivo, el otro debe volverse claro). */
+  --brand-ink: #3e4093; /* texto principal/encabezados */
+  --brand-surface: #ffffff; /* fondo de tarjetas, tablas, inputs */
+  --brand-field: #000000; /* texto tecleado en inputs */
+  --brand-success: #008138; /* texto de montos/estados positivos */
+
+  --brand-red: #fe0000; /* rojo del logo — acentos, insignias */
+  --brand-red-dark: #c00000; /* texto/hover legibles sobre blanco */
+  --brand-red-darker: #8f0000;
+  --brand-red-50: #fff0f0;
+  --brand-red-100: #ffdcdc;
+  --brand-red-300: #ff9d9d;
+
+  --brand-yellow: #fff112; /* amarillo del logo — acentos, insignias */
+  --brand-yellow-dark: #8a7600; /* texto legible sobre blanco/amarillo */
+  --brand-yellow-50: #fffde8;
+  --brand-yellow-100: #fff9b8;
+  --brand-yellow-200: #fff384;
+
+  /* Celeste del bisel del engranaje del logo — color de apoyo/branding,
+     distinto del azul marino (que es el color principal de texto/acentos). */
+  --brand-sky: #6cc9ee;
+  --brand-sky-dark: #0f7ba8; /* texto/ícono legible sobre blanco */
+  --brand-sky-50: #eefaff;
+  --brand-sky-100: #d6f2fd;
+  --brand-sky-200: #b0e6fa;
+}
+
+/* Modo explícito: el toggle (theme-toggle.tsx) escribe data-theme en <html>.
+   Sin data-theme, el tema sigue la preferencia del sistema. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -15,46 +74,130 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Paleta de marca SIGMA — derivada de los 3 colores del logo. El 900
-     de cada escala es el color exacto pedido; el resto son mezclas hacia
-     blanco (fondos/bordes) o hacia negro (texto/hover) para que todo
-     siga siendo legible sobre fondo blanco. */
-  --color-brand-50: #f5f5fa;
-  --color-brand-100: #ececf4;
-  --color-brand-200: #dcddec;
-  --color-brand-300: #a8a9ce;
-  --color-brand-400: #9596c4;
-  --color-brand-500: #7c7db6;
-  --color-brand-600: #6566a9;
-  --color-brand-700: #5557a0;
-  --color-brand-800: #4a4c99;
-  --color-brand-900: #3e4093; /* azul del logo */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
 
-  --color-brand-red: #fe0000; /* rojo del logo — acentos, insignias */
-  --color-brand-red-dark: #c00000; /* texto/hover legibles sobre blanco */
-  --color-brand-red-darker: #8f0000;
-  --color-brand-red-50: #fff0f0;
-  --color-brand-red-100: #ffdcdc;
-  --color-brand-red-300: #ff9d9d;
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-field: var(--brand-field);
+  --color-brand-success: var(--brand-success);
 
-  --color-brand-yellow: #fff112; /* amarillo del logo — acentos, insignias */
-  --color-brand-yellow-dark: #8a7600; /* texto legible sobre blanco/amarillo */
-  --color-brand-yellow-50: #fffde8;
-  --color-brand-yellow-100: #fff9b8;
-  --color-brand-yellow-200: #fff384;
+  --color-brand-red: var(--brand-red);
+  --color-brand-red-dark: var(--brand-red-dark);
+  --color-brand-red-darker: var(--brand-red-darker);
+  --color-brand-red-50: var(--brand-red-50);
+  --color-brand-red-100: var(--brand-red-100);
+  --color-brand-red-300: var(--brand-red-300);
 
-  /* Celeste del bisel del engranaje del logo — color de apoyo/branding,
-     distinto del azul marino (que es el color principal de texto/acentos). */
-  --color-brand-sky: #6cc9ee;
-  --color-brand-sky-dark: #0f7ba8; /* texto/ícono legible sobre blanco */
-  --color-brand-sky-50: #eefaff;
-  --color-brand-sky-100: #d6f2fd;
-  --color-brand-sky-200: #b0e6fa;
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-yellow-dark: var(--brand-yellow-dark);
+  --color-brand-yellow-50: var(--brand-yellow-50);
+  --color-brand-yellow-100: var(--brand-yellow-100);
+  --color-brand-yellow-200: var(--brand-yellow-200);
+
+  --color-brand-sky: var(--brand-sky);
+  --color-brand-sky-dark: var(--brand-sky-dark);
+  --color-brand-sky-50: var(--brand-sky-50);
+  --color-brand-sky-100: var(--brand-sky-100);
+  --color-brand-sky-200: var(--brand-sky-200);
+}
+
+/* Modo oscuro — misma escala y mismos roles, valores invertidos en
+   luminosidad. Los acentos de marca (red/yellow/sky) se mantienen igual
+   de saturados o se aclaran un poco: sobre un fondo casi negro leen mucho
+   más vivos de lo que pueden leer sobre blanco, así que resaltan más.
+   Se aplica por preferencia del sistema (sin elección explícita) y de
+   forma explícita vía [data-theme="dark"] cuando el usuario usa el toggle. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --brand-50: #0b0c1e;
+    --brand-100: #14152c;
+    --brand-200: #262a4d;
+    --brand-300: #3d4270;
+    --brand-400: #6669a0;
+    --brand-500: #8688c2;
+    --brand-600: #a3a5d9;
+    --brand-700: #c0c2e8;
+    --brand-800: #7c7ff5;
+    --brand-900: #6a6df0;
+
+    --brand-ink: #eef0fc;
+    --brand-surface: #16172f;
+    --brand-field: #eef0fc;
+    --brand-success: #5fe3a3;
+
+    --brand-red-dark: #ff8080;
+    --brand-red-darker: #ffaaaa;
+    --brand-red-50: #2a1214;
+    --brand-red-100: #4a1b1f;
+    --brand-red-300: #7a3338;
+
+    --brand-yellow-dark: #ffd83d;
+    --brand-yellow-50: #2b2504;
+    --brand-yellow-100: #453b08;
+    --brand-yellow-200: #5c4e0b;
+
+    --brand-sky-dark: #8ddcf5;
+    --brand-sky-50: #123544;
+    --brand-sky-100: #1d5570;
+    --brand-sky-200: #4dc2e8;
+
+    --color-green-50: #0f2a1c;
+    --color-green-100: #163a26;
+    --color-green-300: #2f6b48;
+  }
+}
+:root[data-theme="dark"] {
+  --brand-50: #0b0c1e;
+  --brand-100: #14152c;
+  --brand-200: #262a4d;
+  --brand-300: #3d4270;
+  --brand-400: #6669a0;
+  --brand-500: #8688c2;
+  --brand-600: #a3a5d9;
+  --brand-700: #c0c2e8;
+  --brand-800: #7c7ff5;
+  --brand-900: #6a6df0;
+
+  --brand-ink: #eef0fc;
+  --brand-surface: #16172f;
+  --brand-field: #eef0fc;
+  --brand-success: #5fe3a3;
+
+  --brand-red-dark: #ff8080;
+  --brand-red-darker: #ffaaaa;
+  --brand-red-50: #2a1214;
+  --brand-red-100: #4a1b1f;
+  --brand-red-300: #7a3338;
+
+  --brand-yellow-dark: #ffd83d;
+  --brand-yellow-50: #2b2504;
+  --brand-yellow-100: #453b08;
+  --brand-yellow-200: #5c4e0b;
+
+  --brand-sky-dark: #8ddcf5;
+  --brand-sky-50: #123544;
+  --brand-sky-100: #1d5570;
+  --brand-sky-200: #4dc2e8;
+
+  --color-green-50: #0f2a1c;
+  --color-green-100: #163a26;
+  --color-green-300: #2f6b48;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  /* El fondo/color reales vienen de las clases bg-brand-50 text-brand-ink
+     puestas en <body> (src/app/layout.tsx) para que seguir el tema
+     claro/oscuro — no fijarlos aquí, o esta regla (sin @layer) le gana
+     en cascada a esas utilidades y el modo oscuro deja de aplicarse. */
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -106,6 +249,106 @@ body {
   ::selection {
     background: var(--color-brand-sky-200);
     color: var(--color-brand-900);
+  }
+}
+
+/* Entrada de la pantalla de login: un único momento coreografiado
+   (franja -> engranaje -> encabezado -> formulario), no animaciones
+   sueltas por elemento. Ver src/app/login/page.tsx. */
+@keyframes login-sweep {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes login-glow {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes login-mark {
+  from {
+    opacity: 0;
+    transform: scale(0.85) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes login-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes login-underline {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes login-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .animate-login-sweep {
+    transform-origin: left;
+    animation: login-sweep 400ms var(--ease-out-strong) both;
+  }
+  .animate-login-glow {
+    animation: login-glow 700ms var(--ease-out-strong) both;
+  }
+  .animate-login-mark {
+    animation: login-mark 500ms var(--ease-out-strong) both;
+  }
+  .animate-login-rise {
+    animation: login-rise 450ms var(--ease-out-strong) both;
+  }
+  .animate-login-underline {
+    transform-origin: center;
+    animation: login-underline 350ms var(--ease-out-strong) both;
+  }
+  .animate-login-alert {
+    animation: login-rise 250ms var(--ease-out-strong) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-login-sweep,
+  .animate-login-glow,
+  .animate-login-mark,
+  .animate-login-rise,
+  .animate-login-underline,
+  .animate-login-alert {
+    animation-name: login-fade;
+    animation-duration: 200ms;
   }
 }
 

@@ -11,7 +11,7 @@ export function CarnetView({ datos }: { datos: DatosCarnet }) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-2 print:hidden">
-        <div className="inline-flex rounded-md border border-brand-300 bg-white p-1">
+        <div className="inline-flex rounded-md border border-brand-300 bg-brand-surface p-1">
           <button
             type="button"
             onClick={() => setOrientacion("horizontal")}

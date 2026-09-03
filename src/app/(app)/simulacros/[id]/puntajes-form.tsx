@@ -25,8 +25,8 @@ export function PuntajesForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <details className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
-      <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-900">
+    <details className="rounded-lg border border-brand-200 bg-brand-surface">
+      <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-ink">
         {materiaNombre}{" "}
         <span className="font-normal text-brand-600">
           (puntaje máximo {puntajeMaximo})
@@ -49,7 +49,7 @@ export function PuntajesForm({
                 step="0.01"
                 defaultValue={puntajesActuales[a.id] ?? ""}
                 placeholder="—"
-                className="w-full rounded-md border border-brand-300 bg-white px-2 py-1.5 text-sm text-black"
+                className="w-full rounded-md border border-brand-300 bg-brand-surface px-2 py-1.5 text-sm text-brand-field"
               />
             </div>
           ))}
@@ -71,7 +71,7 @@ export function PuntajesForm({
         {state.error && (
           <p className="text-xs text-brand-red-dark">{state.error}</p>
         )}
-        {state.ok && <p className="text-xs text-green-700">Guardado.</p>}
+        {state.ok && <p className="text-xs text-brand-success">Guardado.</p>}
       </form>
     </details>
   );

@@ -2,39 +2,30 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import type { Alumno, TipoAsistencia } from "@/lib/types/database";
-import { inicioDiaLima } from "@/lib/utils/fecha";
+import type { Alumno } from "@/lib/types/database";
+import { hoyLima } from "@/lib/utils/fecha";
 
-const TIPOS_VALIDOS: TipoAsistencia[] = ["entrada", "salida", "permiso"];
-
-function esTipoValido(valor: string): valor is TipoAsistencia {
-  return TIPOS_VALIDOS.includes(valor as TipoAsistencia);
-}
+type Supabase = Awaited<ReturnType<typeof createClient>>;
 
 export type MarcarPorCodigoState = {
   error: string | null;
   ok?: {
     alumno: string;
-    tipo: TipoAsistencia;
     telefonoApoderado: string | null;
     tieneWhatsapp: boolean;
     yaEstabaMarcado: boolean;
+    entradaEn: string;
   };
 };
 
-async function yaMarcadoHoy(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  alumnoId: string,
-  tipo: TipoAsistencia
-) {
-  const { count } = await supabase
+async function registroDeHoy(supabase: Supabase, alumnoId: string) {
+  const { data } = await supabase
     .from("asistencias")
-    .select("id", { count: "exact", head: true })
+    .select("id, entrada_en, salida_en, permiso")
     .eq("alumno_id", alumnoId)
-    .eq("tipo", tipo)
-    .gte("marcado_en", inicioDiaLima().toISOString());
-
-  return (count ?? 0) > 0;
+    .eq("fecha", hoyLima())
+    .maybeSingle();
+  return data;
 }
 
 export async function marcarPorCodigo(
@@ -42,8 +33,6 @@ export async function marcarPorCodigo(
   formData: FormData
 ): Promise<MarcarPorCodigoState> {
   const codigo = String(formData.get("codigo") ?? "").trim();
-  const tipoRaw = String(formData.get("tipo") ?? "entrada");
-  const tipo: TipoAsistencia = esTipoValido(tipoRaw) ? tipoRaw : "entrada";
 
   if (!codigo) {
     return { error: null };
@@ -64,11 +53,31 @@ export async function marcarPorCodigo(
     return { error: `${alumno.nombres} ${alumno.apellidos} está dado de baja.` };
   }
 
-  const yaEstabaMarcado = await yaMarcadoHoy(supabase, alumno.id, tipo);
+  const existente = await registroDeHoy(supabase, alumno.id);
 
-  const { error } = await supabase
-    .from("asistencias")
-    .insert({ alumno_id: alumno.id, metodo: "codigo", tipo });
+  if (existente?.entrada_en) {
+    return {
+      error: null,
+      ok: {
+        alumno: `${alumno.nombres} ${alumno.apellidos}`,
+        telefonoApoderado: alumno.telefono_apoderado,
+        tieneWhatsapp: alumno.tiene_whatsapp,
+        yaEstabaMarcado: true,
+        entradaEn: existente.entrada_en,
+      },
+    };
+  }
+
+  const entradaEn = new Date().toISOString();
+  const { error } = await supabase.from("asistencias").upsert(
+    {
+      alumno_id: alumno.id,
+      fecha: hoyLima(),
+      entrada_en: entradaEn,
+      entrada_metodo: "codigo",
+    },
+    { onConflict: "alumno_id,fecha" }
+  );
 
   if (error) {
     return { error: "No se pudo registrar la asistencia: " + error.message };
@@ -79,18 +88,90 @@ export async function marcarPorCodigo(
     error: null,
     ok: {
       alumno: `${alumno.nombres} ${alumno.apellidos}`,
-      tipo,
       telefonoApoderado: alumno.telefono_apoderado,
       tieneWhatsapp: alumno.tiene_whatsapp,
-      yaEstabaMarcado,
+      yaEstabaMarcado: false,
+      entradaEn,
     },
   };
 }
 
-export async function marcarManual(alumnoId: string, tipo: TipoAsistencia) {
+export async function marcarEntradaManual(alumnoId: string) {
   const supabase = await createClient();
-  await supabase
-    .from("asistencias")
-    .insert({ alumno_id: alumnoId, metodo: "manual", tipo });
+  const existente = await registroDeHoy(supabase, alumnoId);
+
+  if (existente?.entrada_en) return;
+
+  await supabase.from("asistencias").upsert(
+    {
+      alumno_id: alumnoId,
+      fecha: hoyLima(),
+      entrada_en: new Date().toISOString(),
+      entrada_metodo: "manual",
+    },
+    { onConflict: "alumno_id,fecha" }
+  );
+  revalidatePath("/asistencia");
+}
+
+export async function marcarSalida(alumnoId: string) {
+  const supabase = await createClient();
+  const existente = await registroDeHoy(supabase, alumnoId);
+
+  // Salida y permiso son mutuamente excluyentes por registro: si ya hay
+  // permiso marcado hoy, no se marca salida también.
+  if (existente?.salida_en || existente?.permiso) return;
+
+  await supabase.from("asistencias").upsert(
+    {
+      alumno_id: alumnoId,
+      fecha: hoyLima(),
+      salida_en: new Date().toISOString(),
+      salida_metodo: "manual",
+    },
+    { onConflict: "alumno_id,fecha" }
+  );
+  revalidatePath("/asistencia");
+}
+
+export async function marcarPermiso(alumnoId: string) {
+  const supabase = await createClient();
+  const existente = await registroDeHoy(supabase, alumnoId);
+
+  if (existente?.permiso || existente?.salida_en) return;
+
+  await supabase.from("asistencias").upsert(
+    {
+      alumno_id: alumnoId,
+      fecha: hoyLima(),
+      permiso: true,
+      permiso_en: new Date().toISOString(),
+      permiso_metodo: "manual",
+    },
+    { onConflict: "alumno_id,fecha" }
+  );
+  revalidatePath("/asistencia");
+}
+
+export async function buscarAlumnosActivos(query: string): Promise<Alumno[]> {
+  const q = query.trim();
+  if (q.length < 2) return [];
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("alumnos")
+    .select("*")
+    .eq("activo", true)
+    .or(`nombres.ilike.%${q}%,apellidos.ilike.%${q}%,dni.ilike.%${q}%`)
+    .order("apellidos", { ascending: true })
+    .limit(8)
+    .returns<Alumno[]>();
+
+  return data ?? [];
+}
+
+export async function eliminarAsistencia(id: string) {
+  const supabase = await createClient();
+  await supabase.from("asistencias").delete().eq("id", id);
   revalidatePath("/asistencia");
 }

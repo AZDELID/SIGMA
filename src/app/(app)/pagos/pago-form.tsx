@@ -29,7 +29,7 @@ export function PagoForm({
     <form
       ref={formRef}
       action={formAction}
-      className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 sm:grid-cols-2 md:grid-cols-3"
+      className="grid grid-cols-1 gap-3 rounded-lg border border-brand-200 bg-brand-surface p-4 sm:grid-cols-2 md:grid-cols-3"
     >
       <div className="md:col-span-2">
         <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -39,7 +39,7 @@ export function PagoForm({
           name="matricula_id"
           required
           defaultValue={matriculaPreseleccionada ?? ""}
-          className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         >
           <option value="" disabled>
             Selecciona un alumno con saldo pendiente
@@ -62,7 +62,7 @@ export function PagoForm({
           min="0.01"
           step="0.01"
           required
-          className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         />
       </div>
       <div>
@@ -72,7 +72,7 @@ export function PagoForm({
         <select
           name="metodo_pago"
           defaultValue="efectivo"
-          className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         >
           <option value="efectivo">Efectivo</option>
           <option value="yape">Yape</option>
@@ -87,7 +87,7 @@ export function PagoForm({
         </label>
         <input
           name="numero_comprobante"
-          className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         />
       </div>
       <div className="md:col-span-2">
@@ -96,7 +96,7 @@ export function PagoForm({
         </label>
         <input
           name="observacion"
-          className="w-full rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="w-full rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         />
       </div>
       <div className="flex items-end">
@@ -112,7 +112,7 @@ export function PagoForm({
         <p className="text-sm text-brand-red-dark md:col-span-3">{state.error}</p>
       )}
       {state.ok && (
-        <p className="text-sm text-green-700 md:col-span-3">
+        <p className="text-sm text-brand-success md:col-span-3">
           Pago registrado.
         </p>
       )}

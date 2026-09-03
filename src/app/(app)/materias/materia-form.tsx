@@ -19,7 +19,7 @@ export function MateriaForm() {
     <form
       ref={formRef}
       action={formAction}
-      className="flex flex-wrap items-end gap-3 rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4"
+      className="flex flex-wrap items-end gap-3 rounded-lg border border-brand-200 bg-brand-surface p-4"
     >
       <div>
         <label className="mb-1 block text-xs font-medium text-brand-600">
@@ -29,7 +29,7 @@ export function MateriaForm() {
           name="nombre"
           required
           placeholder="Aritmética"
-          className="rounded-md border border-brand-300 bg-white px-3 py-2 text-sm text-black"
+          className="rounded-md border border-brand-300 bg-brand-surface px-3 py-2 text-sm text-brand-field"
         />
       </div>
       <button

@@ -78,10 +78,10 @@ export default async function SimulacroDetallePage({
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/simulacros" className="text-sm text-brand-600 hover:text-brand-900">
+        <Link href="/simulacros" className="text-sm text-brand-600 hover:text-brand-ink">
           ← Notas
         </Link>
-        <h1 className="mt-1 text-lg font-semibold text-brand-900">
+        <h1 className="mt-1 text-lg font-semibold text-brand-ink">
           {simulacro.nombre}
         </h1>
         <p className="text-sm text-brand-600">
@@ -90,8 +90,8 @@ export default async function SimulacroDetallePage({
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">Resumen de notas</h2>
-        <div className="overflow-x-auto rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+        <h2 className="text-sm font-semibold text-brand-ink">Resumen de notas</h2>
+        <div className="overflow-x-auto rounded-lg border border-brand-200 bg-brand-surface">
           <table className="w-full text-sm">
             <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
@@ -107,7 +107,7 @@ export default async function SimulacroDetallePage({
             <tbody className="divide-y divide-brand-100">
               {alumnos.map((a) => (
                 <tr key={a.id} className="transition-colors hover:bg-brand-50">
-                  <td className="px-4 py-2 font-medium text-brand-900">
+                  <td className="px-4 py-2 font-medium text-brand-ink">
                     {a.apellidos}, {a.nombres}
                   </td>
                   {simulacroMaterias?.map((sm) => {
@@ -120,7 +120,7 @@ export default async function SimulacroDetallePage({
                       </td>
                     );
                   })}
-                  <td className="px-4 py-2 text-center font-medium text-brand-900">
+                  <td className="px-4 py-2 text-center font-medium text-brand-ink">
                     {notaFinalPorAlumno.get(a.id) ?? "—"}
                   </td>
                 </tr>
@@ -141,7 +141,7 @@ export default async function SimulacroDetallePage({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">Cargar puntajes</h2>
+        <h2 className="text-sm font-semibold text-brand-ink">Cargar puntajes</h2>
         <div className="space-y-2">
           {simulacroMaterias?.map((sm) => {
             const puntajesActuales: Record<string, number> = {};

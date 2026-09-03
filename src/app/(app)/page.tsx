@@ -1,12 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Alumno, Ciclo, MatriculaResumen } from "@/lib/types/database";
-import {
-  hoyLima,
-  inicioDiaLima,
-  inicioDiaLimaDeFecha,
-  inicioMesLima,
-} from "@/lib/utils/fecha";
+import { hoyLima, inicioMesLima } from "@/lib/utils/fecha";
 
 type PagoReciente = {
   id: string;
@@ -32,8 +27,6 @@ export default async function InicioPage({
 
   const hoy = hoyLima();
   const inicioMes = inicioMesLima().toISOString().slice(0, 10);
-  const inicioDiaConsulta = inicioDiaLimaDeFecha(fechaConsulta);
-  const finDiaConsulta = new Date(inicioDiaConsulta.getTime() + 24 * 60 * 60 * 1000);
 
   const [
     { count: alumnosActivos },
@@ -52,8 +45,8 @@ export default async function InicioPage({
     supabase
       .from("asistencias")
       .select("id", { count: "exact", head: true })
-      .eq("tipo", "entrada")
-      .gte("marcado_en", inicioDiaLima().toISOString()),
+      .eq("fecha", hoy)
+      .not("entrada_en", "is", null),
     supabase.from("matriculas_resumen").select("*").returns<MatriculaResumen[]>(),
     supabase
       .from("ciclos")
@@ -83,9 +76,8 @@ export default async function InicioPage({
     supabase
       .from("asistencias")
       .select("alumno_id")
-      .eq("tipo", "entrada")
-      .gte("marcado_en", inicioDiaConsulta.toISOString())
-      .lt("marcado_en", finDiaConsulta.toISOString())
+      .eq("fecha", fechaConsulta)
+      .not("entrada_en", "is", null)
       .returns<{ alumno_id: string }[]>(),
   ]);
 
@@ -123,34 +115,54 @@ export default async function InicioPage({
   }
 
   const tarjetas = [
-    { label: "Alumnos activos", valor: alumnosActivos ?? 0, href: "/alumnos" },
-    { label: "Asistencias hoy", valor: asistenciasHoy ?? 0, href: "/asistencia" },
+    {
+      label: "Alumnos activos",
+      valor: alumnosActivos ?? 0,
+      href: "/alumnos",
+      tono: "neutro",
+    },
+    {
+      label: "Asistencias hoy",
+      valor: asistenciasHoy ?? 0,
+      href: "/asistencia",
+      tono: "neutro",
+    },
     {
       label: "Cobrado hoy",
       valor: `S/ ${cobradoHoy.toFixed(2)}`,
       href: "/pagos",
+      tono: "positivo",
     },
     {
       label: "Cobrado este mes",
       valor: `S/ ${cobradoMes.toFixed(2)}`,
       href: "/pagos",
+      tono: "positivo",
     },
     {
       label: "Alumnos con saldo pendiente",
       valor: conSaldo.length,
       href: "/pagos",
+      tono: "alerta",
     },
     {
       label: "Deuda total pendiente",
       valor: `S/ ${deudaTotal.toFixed(2)}`,
       href: "/pagos",
+      tono: "alerta",
     },
-  ];
+  ] as const;
+
+  const tonoValor: Record<(typeof tarjetas)[number]["tono"], string> = {
+    neutro: "text-brand-ink",
+    positivo: "text-brand-success",
+    alerta: "text-brand-red-dark",
+  };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Inicio</h1>
+        <h1 className="text-lg font-semibold text-brand-ink">Inicio</h1>
         <p className="text-sm text-brand-600">
           Resumen del día — {new Date().toLocaleDateString("es-PE", {
             timeZone: "America/Lima",
@@ -159,15 +171,15 @@ export default async function InicioPage({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {tarjetas.map((t) => (
           <Link
             key={t.label}
             href={t.href}
-            className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+            className="rounded-lg border border-brand-200 bg-brand-surface p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
           >
             <p className="text-xs text-brand-600">{t.label}</p>
-            <p className="mt-1 text-2xl font-semibold text-brand-900">
+            <p className={`mt-2 text-2xl font-semibold ${tonoValor[t.tono]}`}>
               {t.valor}
             </p>
           </Link>
@@ -176,7 +188,7 @@ export default async function InicioPage({
 
       <section className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 className="text-sm font-semibold text-brand-900">
+          <h2 className="text-sm font-semibold text-brand-ink">
             Asistencia por fecha
           </h2>
           <form className="flex items-end gap-2">
@@ -189,12 +201,12 @@ export default async function InicioPage({
                 name="fecha"
                 defaultValue={fechaConsulta}
                 max={hoy}
-                className="rounded-md border border-brand-300 bg-white px-3 py-1.5 text-sm text-black"
+                className="rounded-md border border-brand-300 bg-brand-surface px-3 py-1.5 text-sm text-brand-field"
               />
             </div>
             <button
               type="submit"
-              className="rounded-md border border-brand-300 bg-white px-3 py-1.5 text-sm text-brand-700 hover:bg-brand-100"
+              className="rounded-md border border-brand-300 bg-brand-surface px-3 py-1.5 text-sm text-brand-700 hover:bg-brand-100"
             >
               Ver
             </button>
@@ -202,16 +214,16 @@ export default async function InicioPage({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
+          <div className="rounded-lg border border-brand-200 bg-brand-surface p-4">
             <p className="text-xs text-brand-600">Asistieron el {fechaConsulta}</p>
-            <p className="mt-1 text-2xl font-semibold text-green-700">
+            <p className="mt-1 text-2xl font-semibold text-brand-success">
               {asistieronEseDia.length}
               <span className="ml-1 text-sm font-normal text-brand-600">
                 / {alumnosActivosLista?.length ?? 0}
               </span>
             </p>
           </div>
-          <div className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4">
+          <div className="rounded-lg border border-brand-200 bg-brand-surface p-4">
             <p className="text-xs text-brand-600">Faltaron el {fechaConsulta}</p>
             <p className="mt-1 text-2xl font-semibold text-brand-red-dark">
               {faltaronEseDia.length}
@@ -223,8 +235,8 @@ export default async function InicioPage({
         </div>
 
         {faltaronEseDia.length > 0 && (
-          <details className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
-            <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-900">
+          <details className="rounded-lg border border-brand-200 bg-brand-surface">
+            <summary className="cursor-pointer select-none px-4 py-2 text-sm font-medium text-brand-ink">
               Ver quiénes faltaron ({faltaronEseDia.length})
             </summary>
             <ul className="divide-y divide-brand-100 border-t border-brand-100">
@@ -232,7 +244,7 @@ export default async function InicioPage({
                 <li key={a.id} className="px-4 py-2 text-sm">
                   <Link
                     href={`/alumnos/${a.id}`}
-                    className="text-brand-700 hover:text-brand-900 hover:underline"
+                    className="text-brand-700 hover:text-brand-ink hover:underline"
                   >
                     {a.apellidos}, {a.nombres}
                   </Link>
@@ -244,15 +256,15 @@ export default async function InicioPage({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">Ciclos activos</h2>
+        <h2 className="text-sm font-semibold text-brand-ink">Ciclos activos</h2>
         {ciclosActivos && ciclosActivos.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {ciclosActivos.map((c) => (
               <div
                 key={c.id}
-                className="rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5 p-4"
+                className="rounded-lg border border-brand-200 border-l-4 border-l-brand-900 bg-brand-surface p-4"
               >
-                <p className="font-medium text-brand-900">{c.nombre}</p>
+                <p className="font-medium text-brand-ink">{c.nombre}</p>
                 <p className="text-xs text-brand-600">
                   {c.fecha_inicio} — {c.fecha_fin}
                 </p>
@@ -275,27 +287,27 @@ export default async function InicioPage({
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-brand-900">
+          <h2 className="text-sm font-semibold text-brand-ink">
             Alumnos con mayor deuda
           </h2>
-          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+          <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
             <table className="w-full text-sm">
               <tbody className="divide-y divide-brand-100">
                 {topDeudores.map((m) => (
                   <tr key={m.matricula_id} className="transition-colors hover:bg-brand-50">
                     <td className="px-4 py-2">
-                      <p className="font-medium text-brand-900">
+                      <p className="font-medium text-brand-ink">
                         {m.alumno_apellidos}, {m.alumno_nombres}
                       </p>
                       <p className="text-xs text-brand-600">{m.ciclo_nombre}</p>
                     </td>
-                    <td className="px-4 py-2 text-right font-medium text-brand-yellow-dark">
+                    <td className="px-4 py-2 text-right font-medium text-brand-red-dark">
                       S/ {m.saldo_pendiente.toFixed(2)}
                     </td>
                     <td className="px-4 py-2 text-right">
                       <Link
                         href={`/pagos?matricula=${m.matricula_id}`}
-                        className="text-xs text-brand-600 hover:text-brand-900"
+                        className="text-xs text-brand-600 hover:text-brand-ink"
                       >
                         Cobrar
                       </Link>
@@ -315,16 +327,16 @@ export default async function InicioPage({
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-brand-900">
+          <h2 className="text-sm font-semibold text-brand-ink">
             Últimos pagos
           </h2>
-          <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+          <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
             <table className="w-full text-sm">
               <tbody className="divide-y divide-brand-100">
                 {ultimosPagos?.map((p) => (
                   <tr key={p.id} className="transition-colors hover:bg-brand-50">
                     <td className="px-4 py-2">
-                      <p className="font-medium text-brand-900">
+                      <p className="font-medium text-brand-ink">
                         {p.matriculas.alumnos.apellidos},{" "}
                         {p.matriculas.alumnos.nombres}
                       </p>
@@ -332,7 +344,7 @@ export default async function InicioPage({
                         {p.matriculas.ciclos.nombre} · {p.fecha_pago}
                       </p>
                     </td>
-                    <td className="px-4 py-2 text-right font-medium text-green-700">
+                    <td className="px-4 py-2 text-right font-medium text-brand-success">
                       S/ {Number(p.monto).toFixed(2)}
                     </td>
                   </tr>
@@ -351,10 +363,10 @@ export default async function InicioPage({
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-brand-900">
+        <h2 className="text-sm font-semibold text-brand-ink">
           Últimas matrículas
         </h2>
-        <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+        <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
           <table className="w-full text-sm">
             <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
               <tr>
@@ -370,14 +382,14 @@ export default async function InicioPage({
                   <td className="px-4 py-2 text-brand-600">
                     {m.fecha_matricula}
                   </td>
-                  <td className="px-4 py-2 font-medium text-brand-900">
+                  <td className="px-4 py-2 font-medium text-brand-ink">
                     {m.alumno_apellidos}, {m.alumno_nombres}
                   </td>
                   <td className="px-4 py-2 text-brand-600">{m.ciclo_nombre}</td>
                   <td className="px-4 py-2 text-right">
                     <Link
                       href={`/alumnos/${m.alumno_id}`}
-                      className="text-xs text-brand-600 hover:text-brand-900"
+                      className="text-xs text-brand-600 hover:text-brand-ink"
                     >
                       Ver
                     </Link>

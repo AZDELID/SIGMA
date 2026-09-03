@@ -14,7 +14,7 @@ export default async function CiclosPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-brand-900">Ciclos</h1>
+        <h1 className="text-lg font-semibold text-brand-ink">Ciclos</h1>
         <p className="text-sm text-brand-600">
           Los planes/periodos en los que se matriculan los alumnos.
         </p>
@@ -22,7 +22,7 @@ export default async function CiclosPage() {
 
       <CicloForm />
 
-      <div className="overflow-hidden rounded-lg border border-brand-200 bg-white shadow-sm shadow-brand-900/5">
+      <div className="overflow-hidden rounded-lg border border-brand-200 bg-brand-surface">
         <table className="w-full text-sm">
           <thead className="bg-brand-50 text-left text-[11px] font-semibold uppercase tracking-wider text-brand-700">
             <tr>
@@ -37,7 +37,7 @@ export default async function CiclosPage() {
           <tbody className="divide-y divide-brand-100">
             {ciclos?.map((ciclo) => (
               <tr key={ciclo.id} className="transition-colors hover:bg-brand-50">
-                <td className="px-4 py-2 font-medium text-brand-900">
+                <td className="px-4 py-2 font-medium text-brand-ink">
                   {ciclo.nombre}
                 </td>
                 <td className="px-4 py-2 text-brand-600">
@@ -51,7 +51,7 @@ export default async function CiclosPage() {
                   <span
                     className={
                       ciclo.activo
-                        ? "rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700"
+                        ? "rounded-full bg-green-100 px-2 py-0.5 text-xs text-brand-success"
                         : "rounded-full bg-brand-100 px-2 py-0.5 text-xs text-brand-600"
                     }
                   >

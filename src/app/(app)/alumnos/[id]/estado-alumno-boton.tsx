@@ -27,7 +27,7 @@ export function EstadoAlumnoBoton({
             startTransition(() => darDeBajaAlumno(alumnoId));
           }
         }}
-        className="rounded-md border border-brand-red-300 bg-white px-3 py-1.5 text-sm text-brand-red-dark hover:bg-brand-red-50 disabled:opacity-50"
+        className="rounded-md border border-brand-red-300 bg-brand-surface px-3 py-1.5 text-sm text-brand-red-dark hover:bg-brand-red-50 disabled:opacity-50"
       >
         {pending ? "Procesando..." : "Dar de baja"}
       </button>
@@ -39,7 +39,7 @@ export function EstadoAlumnoBoton({
       type="button"
       disabled={pending}
       onClick={() => startTransition(() => reactivarAlumno(alumnoId))}
-      className="rounded-md border border-green-300 bg-white px-3 py-1.5 text-sm text-green-700 hover:bg-green-50 disabled:opacity-50"
+      className="rounded-md border border-green-300 bg-brand-surface px-3 py-1.5 text-sm text-brand-success hover:bg-green-50 disabled:opacity-50"
     >
       {pending ? "Procesando..." : "Reactivar"}
     </button>
